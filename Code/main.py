@@ -14,7 +14,8 @@ while True:
                 pygame.quit()
                 sys.exit()
 
-        screen.fill('black')
+        bg = pygame.image.load('../Graphics/Textures/bg.png')
+        screen.blit(bg, (0,0))
 
         level.run()
 

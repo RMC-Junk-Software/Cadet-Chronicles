@@ -1,6 +1,6 @@
 import pygame
 from tiles import Tile
-from settings import tile_size, screen_width, speed
+from settings import tile_x, tile_y, screen_width, speed
 from player import Player
 
 class Level:
@@ -16,14 +16,14 @@ class Level:
         for row_in, row in enumerate(layout):
             for col_in, item in enumerate(row):
                 if item == 'X':
-                    x = col_in * tile_size
-                    y = row_in * tile_size
-                    tile = Tile((x,y), tile_size)
+                    x = col_in * tile_x
+                    y = row_in * tile_y
+                    tile = Tile((x,y), (tile_x, tile_y))
                     self.tiles.add(tile)
 
                 if item == 'P':
-                    x = col_in * tile_size
-                    y = row_in * tile_size
+                    x = col_in * tile_x
+                    y = row_in * tile_y
                     player = Player((x,y))
                     self.player.add(player)
 

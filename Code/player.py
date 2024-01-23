@@ -4,10 +4,10 @@ from settings import speed, gravity, jump_speed
 class Player(pygame.sprite.Sprite):
     def __init__(self,pos):
         super().__init__()
-        self.image = pygame.Surface((60,120))
-        self.image.fill('Red')
+        self.image = pygame.image.load("../Graphics/Character/elof.png")
         self.rect = self.image.get_rect(midleft = pos)
         self.direction = pygame.math.Vector2(0,0)
+        self.orientation = 'left'
 
         # Movement
         self.speed = speed
@@ -20,8 +20,16 @@ class Player(pygame.sprite.Sprite):
 
         if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
             self.direction.x = 1
+
+            if self.orientation == 'left':
+                self.orientation = 'right'
+                self.image = pygame.transform.flip(self.image, True, False)
+
         elif keys[pygame.K_a] or keys[pygame.K_LEFT]:
             self.direction.x = -1
+            if self.orientation == 'right':
+                self.orientation = 'left'
+                self.image = pygame.transform.flip(self.image, True, False)
         else:
             self.direction.x = 0
 

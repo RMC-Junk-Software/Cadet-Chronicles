@@ -1,1 +1,0 @@
-Graphical files related to the game belong in this folder

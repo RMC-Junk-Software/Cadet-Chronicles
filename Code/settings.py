@@ -10,10 +10,11 @@ level_map = [
 '    XXXX  XXXXXX  XX  XXXX  ',
 'XXXXXXXX  XXXXXX  XX  XXXX  ']
 
-tile_size = 60
+tile_x = 84
+tile_y = 60
 screen_width = 1000
 screen_height = 750
 
-speed = 5.0
-gravity = 0.8
-jump_speed = -10
+speed = 8.0
+gravity = 1.3
+jump_speed = -16
