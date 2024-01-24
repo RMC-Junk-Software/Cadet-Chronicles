@@ -8,6 +8,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(midleft = pos)
         self.direction = pygame.math.Vector2(0,0)
         self.orientation = 'left'
+        self.can_jump = False
 
         # Movement
         self.speed = speed
@@ -42,6 +43,8 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.direction.y
 
     def jump(self):
-        self.direction.y = self.jump_speed
+        if self.can_jump:
+            self.direction.y = self.jump_speed
+            self.can_jump = False
     def update(self):
         self.get_input()
