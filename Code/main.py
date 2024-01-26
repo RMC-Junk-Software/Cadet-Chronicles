@@ -1,4 +1,4 @@
-import pygame, sys, numpy
+import pygame, sys
 from settings import *
 from level import Level
 
@@ -14,7 +14,7 @@ while True:
                 pygame.quit()
                 sys.exit()
 
-        bg = pygame.image.load('../Graphics/Textures/bg.png')
+        bg = pygame.image.load('../Graphics/Textures/bg.png').convert()
         screen.blit(bg, (0,0))
 
         level.run()
