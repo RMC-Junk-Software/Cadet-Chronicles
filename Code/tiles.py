@@ -6,8 +6,9 @@ class Tile(pygame.sprite.Sprite):
         self.image = pygame.Surface((size_x, size_y))
         self.rect = self.image.get_rect(topleft = (x,y))
 
-    def update(self, x_shift):
+    def update(self, x_shift, y_shift):
         self.rect.x += x_shift
+        self.rect.y += y_shift
 
 class StaticTile(Tile):
     def __init__(self, size_x, size_y, x, y, surface):

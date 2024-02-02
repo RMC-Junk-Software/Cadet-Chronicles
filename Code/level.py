@@ -1,6 +1,6 @@
 import pygame
 from tiles import Tile, StaticTile
-from settings import tile_x, tile_y, screen_width, screen_height, speed
+from settings import tile_x, tile_y, screen_width, screen_height, speed, jump_speed
 from player import Player
 from support import import_csv_layout, import_cut_graphics
 
@@ -8,7 +8,8 @@ from support import import_csv_layout, import_cut_graphics
 class Level:
     def __init__(self, level_data, skin, surface):
         self.display_surface = surface
-        self.world_shift = 0
+        self.world_shift_x = 0
+        self.world_shift_y = 0
         self.skin = skin
 
         player_layout = import_csv_layout(level_data['player'])
@@ -50,15 +51,15 @@ class Level:
         direction_x = player.direction.x
 
         if player_x < screen_width/3 and direction_x < 0:
-            self.world_shift = 8
+            self.world_shift_x = speed
             player.speed = 0
 
-        elif player_x > (screen_width - screen_width/2) and direction_x > 0:
-            self.world_shift = -8
+        elif player_x > (screen_width - screen_width/3) and direction_x > 0:
+            self.world_shift_x = -speed
             player.speed = 0
 
         else:
-            self.world_shift = 0
+            self.world_shift_x = 0
             player.speed = speed
 
     def scroll_y(self):
@@ -67,16 +68,17 @@ class Level:
         direction_y = player.direction.y
 
         if player_y < screen_height/5 and direction_y < 0:
-            self.world_shift = 8
-            player.speed = 0
+            self.world_shift_y = 20
+            direction_y = 0
 
         elif player_y > (screen_height - screen_height/5) and direction_y > 0:
-            self.world_shift = -8
-            player.speed = 0
+            self.world_shift_y = -20
+            direction_y = 0
 
         else:
-            self.world_shift = 0
-            player.speed = speed
+            player.jump_speed = jump_speed
+            self.world_shift_y = 0
+
 
     def horizontal_movement_collision(self):
         player = self.player.sprite
@@ -105,17 +107,18 @@ class Level:
 
     def run(self):
 
+        self.terrain_sprites.update(self.world_shift_x, self.world_shift_y)
         self.terrain_sprites.draw(self.display_surface)
-        self.terrain_sprites.update(self.world_shift)
+
+        self.horizontal_movement_collision()
+        self.vertical_movement_collision()
 
         self.scroll_x()
-        # self.scroll_y()
+        self.scroll_y()
 
         self.player.update()
         self.player.draw(self.display_surface)
 
-        self.goal.update(self.world_shift)
+        self.goal.update(self.world_shift_x)
         self.goal.draw(self.display_surface)
 
-        self.horizontal_movement_collision()
-        self.vertical_movement_collision()
