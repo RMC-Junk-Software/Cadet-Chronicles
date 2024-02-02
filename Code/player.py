@@ -2,9 +2,9 @@ import pygame.sprite
 from settings import speed, gravity, jump_speed
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self,pos):
+    def __init__(self, skin, pos):
         super().__init__()
-        self.image = pygame.image.load("../Graphics/Character/elof.png")
+        self.image = pygame.image.load(skin)
         self.rect = self.image.get_rect(midleft = pos)
         self.direction = pygame.math.Vector2(0,0)
         self.orientation = 'left'
@@ -37,7 +37,6 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_SPACE] or keys[pygame.K_UP]:
             self.jump()
 
-
     def apply_gravity(self):
         self.direction.y += self.gravity
         self.rect.y += self.direction.y
@@ -46,5 +45,6 @@ class Player(pygame.sprite.Sprite):
         if self.can_jump:
             self.direction.y = self.jump_speed
             self.can_jump = False
+
     def update(self):
         self.get_input()

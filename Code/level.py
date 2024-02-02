@@ -1,42 +1,76 @@
 import pygame
-from tiles import Tile
-from settings import tile_x, tile_y, screen_width, speed
+from tiles import Tile, StaticTile
+from settings import tile_x, tile_y, screen_width, screen_height, speed
 from player import Player
+from support import import_csv_layout, import_cut_graphics
+
 
 class Level:
-    def __init__(self, level_data, surface):
+    def __init__(self, level_data, skin, surface):
         self.display_surface = surface
-        self.setup_level(level_data)
         self.world_shift = 0
+        self.skin = skin
 
-
-    def setup_level(self,layout):
-        self.tiles = pygame.sprite.Group()
+        player_layout = import_csv_layout(level_data['player'])
         self.player = pygame.sprite.GroupSingle()
-        for row_in, row in enumerate(layout):
-            for col_in, item in enumerate(row):
-                if item == 'X':
-                    x = col_in * tile_x
-                    y = row_in * tile_y
-                    tile = Tile((x,y), (tile_x, tile_y))
-                    self.tiles.add(tile)
+        self.goal = pygame.sprite.GroupSingle()
+        self.player_setup(player_layout)
 
-                if item == 'P':
-                    x = col_in * tile_x
-                    y = row_in * tile_y
-                    player = Player((x,y))
-                    self.player.add(player)
+        terrain_layout = import_csv_layout(level_data['terrain'])
+        self.terrain_sprites = self.create_tile_group(terrain_layout, 'terrain')
+
+    def create_tile_group(self, layout, type):
+        sprite_group = pygame.sprite.Group()
+
+        for row_index, row in enumerate(layout):
+            for col_index, val in enumerate(row):
+                if val != '-1':
+                    x = col_index * tile_x
+                    y = row_index * tile_y
+
+                    if type == 'terrain':
+                        tile_surface = pygame.image.load('../Graphics/Textures/tile.png').convert()
+                        sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
+                        sprite_group.add(sprite)
+
+        return sprite_group
+
+    def player_setup(self, layout):
+        for row_index, row in enumerate(layout):
+            for col_index, val in enumerate(row):
+                x = col_index * tile_x
+                y = row_index * tile_y
+                if val == '0':
+                    sprite = Player(self.skin, (x,y))
+                    self.player.add(sprite)
 
     def scroll_x(self):
         player = self.player.sprite
         player_x = player.rect.centerx
         direction_x = player.direction.x
 
-        if player_x < screen_width/5 and direction_x < 0:
+        if player_x < screen_width/3 and direction_x < 0:
             self.world_shift = 8
             player.speed = 0
 
-        elif player_x > (screen_width - screen_width/5) and direction_x > 0:
+        elif player_x > (screen_width - screen_width/2) and direction_x > 0:
+            self.world_shift = -8
+            player.speed = 0
+
+        else:
+            self.world_shift = 0
+            player.speed = speed
+
+    def scroll_y(self):
+        player = self.player.sprite
+        player_y = player.rect.centery
+        direction_y = player.direction.y
+
+        if player_y < screen_height/5 and direction_y < 0:
+            self.world_shift = 8
+            player.speed = 0
+
+        elif player_y > (screen_height - screen_height/5) and direction_y > 0:
             self.world_shift = -8
             player.speed = 0
 
@@ -48,7 +82,7 @@ class Level:
         player = self.player.sprite
         player.rect.x += player.direction.x * player.speed
 
-        for sprite in self.tiles.sprites():
+        for sprite in self.terrain_sprites.sprites():
             if sprite.rect.colliderect(player.rect):
                 if player.direction.x < 0:
                     player.rect.left = sprite.rect.right
@@ -59,7 +93,7 @@ class Level:
         player = self.player.sprite
         player.apply_gravity()
 
-        for sprite in self.tiles.sprites():
+        for sprite in self.terrain_sprites.sprites():
             if sprite.rect.colliderect(player.rect):
                 if player.direction.y > 0:
                     player.rect.bottom = sprite.rect.top
@@ -69,14 +103,19 @@ class Level:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
 
-
     def run(self):
-        self.tiles.update(self.world_shift)
-        self.tiles.draw(self.display_surface)
-        self.scroll_x()
 
+        self.terrain_sprites.draw(self.display_surface)
+        self.terrain_sprites.update(self.world_shift)
+
+        self.scroll_x()
+        # self.scroll_y()
 
         self.player.update()
+        self.player.draw(self.display_surface)
+
+        self.goal.update(self.world_shift)
+        self.goal.draw(self.display_surface)
+
         self.horizontal_movement_collision()
         self.vertical_movement_collision()
-        self.player.draw(self.display_surface)
