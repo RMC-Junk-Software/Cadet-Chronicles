@@ -3,6 +3,7 @@ from tiles import Tile, StaticTile
 from settings import tile_x, tile_y, screen_width, screen_height, speed, jump_speed
 from player import Player
 from support import import_csv_layout, import_cut_graphics
+import Camera
 
 
 class Level:
@@ -20,6 +21,8 @@ class Level:
         self.player = pygame.sprite.GroupSingle()
         self.goal = pygame.sprite.GroupSingle()
         self.player_setup(player_layout)
+
+        self.camera = None
 
         terrain_layout = import_csv_layout(level_data['terrain'])
         self.terrain_sprites = self.create_tile_group(terrain_layout, 'terrain')
@@ -52,6 +55,12 @@ class Level:
                         sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
                         sprite_group.add(sprite)
 
+        x = (col_index+1)*tile_x
+        y = (row_index + 1) * tile_y
+
+        self.camera = Camera.Camera(Camera.complex_camera, x, y)
+
+
         return sprite_group
 
     def player_setup(self, layout):
@@ -67,40 +76,6 @@ class Level:
                 #     end_tile = pygame.image.load('elof.png')
                 #     sprite = StaticTile(tile_x, tile_y, x, y, end_tile)
                 #     self.goal.add(sprite)
-
-    def scroll_x(self):
-        player = self.player.sprite
-        player_x = player.rect.centerx
-        direction_x = player.direction.x
-
-        if player_x < screen_width/3 and direction_x < 0:
-            self.world_shift_x = speed
-            player.speed = 0
-
-        elif player_x > (screen_width - screen_width/3) and direction_x > 0:
-            self.world_shift_x = -speed
-            player.speed = 0
-
-        else:
-            self.world_shift_x = 0
-            player.speed = speed
-
-    def scroll_y(self):
-        player = self.player.sprite
-        player_y = player.rect.centery
-        direction_y = player.direction.y
-
-        if player_y < screen_height/5 and direction_y < 0:
-            self.world_shift_y = 20
-            direction_y = 0
-
-        elif player_y > (screen_height - screen_height/5) and direction_y > 0:
-            self.world_shift_y = -20
-            direction_y = 0
-
-        else:
-            player.jump_speed = jump_speed
-            self.world_shift_y = 0
 
 
     def horizontal_movement_collision(self):
@@ -132,18 +107,18 @@ class Level:
 
         self.input()
 
+        self.camera.update(self.player.sprite)
+
         self.terrain_sprites.update(self.world_shift_x, self.world_shift_y)
-        self.terrain_sprites.draw(self.display_surface)
+        for tile in self.terrain_sprites:
+            self.display_surface.blit(tile.image, self.camera.apply(tile))
 
         self.horizontal_movement_collision()
         self.vertical_movement_collision()
 
-        self.scroll_x()
-        self.scroll_y()
-
         self.player.update()
-        self.player.draw(self.display_surface)
+        self.display_surface.blit(self.player.sprite.image, self.camera.apply(self.player.sprite))
 
         self.goal.update(self.world_shift_x, self.world_shift_y)
-        self.goal.draw(self.display_surface)
+        self.display_surface.blit(self.goal.sprite.image, self.camera.apply(self.goal.image))
 
