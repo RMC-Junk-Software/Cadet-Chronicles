@@ -29,13 +29,15 @@ class Level:
         player = self.player.sprite
 
         if keys[pygame.K_ESCAPE]:
+            self.create_overworld(self.current_level, 0)
+        elif pygame.sprite.spritecollide(player, self.goal, False):
+            if self.new_max_level == 4:
+                # game complete code
+                print("Game complete!")
             self.create_overworld(self.current_level, self.new_max_level)
         # death code
         # elif player.rect.centery < -30:
         #     self.create_level(self.current_level)
-        # level complete code
-        # elif pygame.sprite.spritecollide(player, self.goal, False):
-        #     self.create_overworld(self.current_level, self.new_max_level)
 
     def create_tile_group(self, layout, type):
         sprite_group = pygame.sprite.Group()
@@ -62,11 +64,10 @@ class Level:
                 if val == '0':
                     sprite = Player(self.current_level['skin'], (x,y))
                     self.player.add(sprite)
-                # allow player to end the level
-                # if val == '1':
-                #     end_tile = pygame.image.load('elof.png')
-                #     sprite = StaticTile(tile_x, tile_y, x, y, end_tile)
-                #     self.goal.add(sprite)
+                if val == '1':
+                    end_tile = pygame.image.load('../Graphics/Character/elof.png')
+                    sprite = StaticTile(tile_x, tile_y, x, y, end_tile)
+                    self.goal.add(sprite)
 
     def scroll_x(self):
         player = self.player.sprite
