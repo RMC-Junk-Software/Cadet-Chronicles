@@ -6,11 +6,15 @@ from support import import_csv_layout, import_cut_graphics
 
 
 class Level:
-    def __init__(self, level_data, skin, surface):
+    def __init__(self, level_data, surface, create_overworld, create_level):
+        self.current_level = level_data
+        self.new_max_level = level_data['unlock']
         self.display_surface = surface
+        self.create_overworld = create_overworld
+        self.create_level = create_level
+
         self.world_shift_x = 0
         self.world_shift_y = 0
-        self.skin = skin
 
         player_layout = import_csv_layout(level_data['player'])
         self.player = pygame.sprite.GroupSingle()
@@ -19,6 +23,19 @@ class Level:
 
         terrain_layout = import_csv_layout(level_data['terrain'])
         self.terrain_sprites = self.create_tile_group(terrain_layout, 'terrain')
+
+    def input(self):
+        keys = pygame.key.get_pressed()
+        player = self.player.sprite
+
+        if keys[pygame.K_ESCAPE]:
+            self.create_overworld(self.current_level, self.new_max_level)
+        # death code
+        # elif player.rect.centery < -30:
+        #     self.create_level(self.current_level)
+        # level complete code
+        # elif pygame.sprite.spritecollide(player, self.goal, False):
+        #     self.create_overworld(self.current_level, self.new_max_level)
 
     def create_tile_group(self, layout, type):
         sprite_group = pygame.sprite.Group()
@@ -30,7 +47,8 @@ class Level:
                     y = row_index * tile_y
 
                     if type == 'terrain':
-                        tile_surface = pygame.image.load('../Graphics/Textures/tile.png').convert()
+                        terrain_tile_list = import_cut_graphics('../Graphics/Textures/tile.png')
+                        tile_surface = terrain_tile_list[int(val)]
                         sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
                         sprite_group.add(sprite)
 
@@ -42,8 +60,13 @@ class Level:
                 x = col_index * tile_x
                 y = row_index * tile_y
                 if val == '0':
-                    sprite = Player(self.skin, (x,y))
+                    sprite = Player(self.current_level['skin'], (x,y))
                     self.player.add(sprite)
+                # allow player to end the level
+                # if val == '1':
+                #     end_tile = pygame.image.load('elof.png')
+                #     sprite = StaticTile(tile_x, tile_y, x, y, end_tile)
+                #     self.goal.add(sprite)
 
     def scroll_x(self):
         player = self.player.sprite
@@ -107,6 +130,8 @@ class Level:
 
     def run(self):
 
+        self.input()
+
         self.terrain_sprites.update(self.world_shift_x, self.world_shift_y)
         self.terrain_sprites.draw(self.display_surface)
 
@@ -119,6 +144,6 @@ class Level:
         self.player.update()
         self.player.draw(self.display_surface)
 
-        self.goal.update(self.world_shift_x)
+        self.goal.update(self.world_shift_x, self.world_shift_y)
         self.goal.draw(self.display_surface)
 
