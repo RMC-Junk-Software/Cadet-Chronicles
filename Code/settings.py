@@ -5,4 +5,4 @@ screen_height = 750
 
 speed = 8.0
 gravity = 1
-jump_speed = -18
+jump_speed = -20

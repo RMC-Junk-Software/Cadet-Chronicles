@@ -27,6 +27,9 @@ class Level:
         terrain_layout = import_csv_layout(level_data['terrain'])
         self.terrain_sprites = self.create_tile_group(terrain_layout, 'terrain')
 
+        bars_layout = import_csv_layout(level_data['bars'])
+        self.bars_sprites = self.create_tile_group(bars_layout, 'bars')
+
     def input(self):
         keys = pygame.key.get_pressed()
         player = self.player.sprite
@@ -57,11 +60,16 @@ class Level:
                         sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
                         sprite_group.add(sprite)
 
+                    if type == 'bars':
+                        terrain_tile_list = import_cut_graphics('../Graphics/Sprites/Bars.png')
+                        tile_surface = terrain_tile_list[int(val)]
+                        sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
+                        sprite_group.add(sprite)
+
         x = (col_index+1)*tile_x
         y = (row_index + 1) * tile_y
 
         self.camera = Camera.Camera(Camera.complex_camera, x, y)
-
 
         return sprite_group
 
@@ -112,6 +120,10 @@ class Level:
 
         self.terrain_sprites.update(self.world_shift_x, self.world_shift_y)
         for tile in self.terrain_sprites:
+            self.display_surface.blit(tile.image, self.camera.apply(tile))
+
+        self.bars_sprites.update(self.world_shift_x, self.world_shift_y)
+        for tile in self.bars_sprites:
             self.display_surface.blit(tile.image, self.camera.apply(tile))
 
         self.horizontal_movement_collision()
