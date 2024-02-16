@@ -121,5 +121,5 @@ class Level:
         self.display_surface.blit(self.player.sprite.image, self.camera.apply(self.player.sprite))
 
         self.goal.update(self.world_shift_x, self.world_shift_y)
-        self.display_surface.blit(self.goal.sprite.image, self.camera.apply(self.goal.image))
+        self.display_surface.blit(self.goal.sprite.image, self.camera.apply(self.goal.sprite))
 
