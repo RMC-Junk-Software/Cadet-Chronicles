@@ -14,9 +14,6 @@ class Level:
         self.create_overworld = create_overworld
         self.create_level = create_level
 
-        self.world_shift_x = 0
-        self.world_shift_y = 0
-
         player_layout = import_csv_layout(level_data['player'])
         self.player = pygame.sprite.GroupSingle()
         self.goal = pygame.sprite.GroupSingle()
@@ -118,11 +115,9 @@ class Level:
 
         self.camera.update(self.player.sprite)
 
-        self.terrain_sprites.update(self.world_shift_x, self.world_shift_y)
         for tile in self.terrain_sprites:
             self.display_surface.blit(tile.image, self.camera.apply(tile))
 
-        self.bars_sprites.update(self.world_shift_x, self.world_shift_y)
         for tile in self.bars_sprites:
             self.display_surface.blit(tile.image, self.camera.apply(tile))
 
@@ -132,6 +127,5 @@ class Level:
         self.player.update()
         self.display_surface.blit(self.player.sprite.image, self.camera.apply(self.player.sprite))
 
-        self.goal.update(self.world_shift_x, self.world_shift_y)
         self.display_surface.blit(self.goal.sprite.image, self.camera.apply(self.goal.sprite))
 
