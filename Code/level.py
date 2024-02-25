@@ -1,5 +1,5 @@
 import pygame
-from tiles import Tile, StaticTile
+from tiles import Tile, StaticTile, bars
 from settings import tile_x, tile_y, screen_width, screen_height, speed, jump_speed
 from player import Player
 from support import import_csv_layout, import_cut_graphics
@@ -61,9 +61,7 @@ class Level:
                         sprite_group.add(sprite)
 
                     if type == 'bars':
-                        terrain_tile_list = import_cut_graphics('../Graphics/Sprites/Bars.png')
-                        tile_surface = terrain_tile_list[int(val)]
-                        sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
+                        sprite = bars(tile_x, tile_y, x, y)
                         sprite_group.add(sprite)
 
         x = (col_index+1)*tile_x
