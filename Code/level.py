@@ -110,6 +110,9 @@ class Level:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
 
+    def check_bar_collision(self):
+        collided_bar = pygame.sprite.spritecollide(self.player.sprite, self.bars_sprites, True)
+
     def run(self):
 
         self.input()
@@ -123,6 +126,7 @@ class Level:
         self.bars_sprites.update(self.world_shift_x, self.world_shift_y)
         for tile in self.bars_sprites:
             self.display_surface.blit(tile.image, self.camera.apply(tile))
+        self.check_bar_collision()
 
         self.horizontal_movement_collision()
         self.vertical_movement_collision()
