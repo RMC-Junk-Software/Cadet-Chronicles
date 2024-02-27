@@ -38,9 +38,9 @@ class Overworld:
             self.nodes.add(node_sprite)
 
     def back_button(self):
-        self.node_button = pygame.sprite.GroupSingle()
+        self.back = pygame.sprite.GroupSingle()
         node_sprite = Node((60,50), 'available')
-        self.node_button.add(node_sprite)
+        self.back.add(node_sprite)
 
     def draw_paths(self):
         if self.max_level > 0:
@@ -62,15 +62,15 @@ class Overworld:
                 if index <= self.max_level:
                     sprites.image.fill('red')
 
-        if self.node_button.sprite.rect.colliderect(self.mouse):
-            self.node_button.sprite.image.fill('green')
+        if self.back.sprite.rect.colliderect(self.mouse):
+            self.back.sprite.image.fill('green')
             if pygame.mouse.get_pressed()[0]:
                 self.create_main_menu(self.current_level, self.max_level)
         else:
-            self.node_button.sprite.image.fill('red')
+            self.back.sprite.image.fill('red')
 
     def run(self):
         self.draw_paths()
         self.nodes.draw(self.display_surface)
-        self.node_button.draw(self.display_surface)
+        self.back.draw(self.display_surface)
         self.check_mouse()
