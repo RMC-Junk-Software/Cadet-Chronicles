@@ -1,5 +1,5 @@
 import pygame
-from tiles import Tile, StaticTile, bars
+from tiles import Tile, StaticTile, Collectibles
 from settings import tile_x, tile_y, screen_width, screen_height, speed, jump_speed
 from player import Player
 from support import import_csv_layout, import_cut_graphics
@@ -55,13 +55,13 @@ class Level:
                     y = row_index * tile_y
 
                     if type == 'terrain':
-                        terrain_tile_list = import_cut_graphics('../Graphics/Textures/tile.png')
+                        terrain_tile_list = import_cut_graphics(self.current_level['terrain_skin'])
                         tile_surface = terrain_tile_list[int(val)]
                         sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
                         sprite_group.add(sprite)
 
                     if type == 'collectible':
-                        sprite = bars(tile_x, tile_y, x, y)
+                        sprite = Collectibles(tile_x, tile_y, x, y, self.current_level['collectible_skin'])
                         sprite_group.add(sprite)
 
         x = (col_index+1)*tile_x
@@ -77,7 +77,7 @@ class Level:
                 x = col_index * tile_x
                 y = row_index * tile_y
                 if val == '0':
-                    sprite = Player(self.current_level['skin'], (x,y))
+                    sprite = Player(self.current_level['player_skin'], (x,y))
                     self.player.add(sprite)
                 if val == '1':
                     end_tile = pygame.image.load('../Graphics/Character/elof.png')

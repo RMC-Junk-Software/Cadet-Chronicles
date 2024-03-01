@@ -15,6 +15,7 @@ class StaticTile(Tile):
         super().__init__(size_x, size_y, x, y)
         self.image = surface
 
-class bars(StaticTile):
-    def __init__(self, size_x, size_y, x, y):
-        super().__init__(size_x, size_y, x, y, pygame.image.load('../Graphics/Sprites/Bars.png').convert_alpha())
+
+class Collectibles(StaticTile):
+    def __init__(self, size_x, size_y, x, y, collectible):
+        super().__init__(size_x, size_y, x, y, pygame.image.load(collectible).convert_alpha())
