@@ -5,7 +5,7 @@ from Game_data import levels
 class Node(pygame.sprite.Sprite):
     def __init__(self, pos, status):
         super().__init__()
-        self.image = pygame.Surface((100, 80))
+        self.image = pygame.Surface((200, 80))
         if status == 'available':
             self.image.fill('red')
         else:
@@ -19,6 +19,8 @@ class Overworld:
         self.current_level = current_level
         self.max_level = max_level
         self.display_surface = surface
+        self.text = [pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("1st Year", True, (255, 255, 255)),pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("2n Year", True, (255, 255, 255)),pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("3rd Year", True, (255, 255, 255)),pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("4th Year", True, (255, 255, 255)),pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("Back", True, (255, 255, 255))]
+        self.text_rect = []
 
         self.create_level = create_level
         self.create_main_menu = create_main_menu
@@ -37,10 +39,13 @@ class Overworld:
                 node_sprite = Node(node_data['node_pos'], 'locked')
             self.nodes.add(node_sprite)
 
+            self.text_rect.append(self.text[index].get_rect(center=node_sprite.rect.center))
+
     def back_button(self):
         self.node_button = pygame.sprite.GroupSingle()
         node_sprite = Node((60,50), 'available')
         self.node_button.add(node_sprite)
+        self.text_rect.append(self.text[4].get_rect(center=node_sprite.rect.center))
 
     def draw_paths(self):
         if self.max_level > 0:
@@ -73,4 +78,6 @@ class Overworld:
         self.draw_paths()
         self.nodes.draw(self.display_surface)
         self.node_button.draw(self.display_surface)
+        for i in range(len(self.text)):
+            self.display_surface.blit(self.text[i], self.text_rect[i])
         self.check_mouse()
