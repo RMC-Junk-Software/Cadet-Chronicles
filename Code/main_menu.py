@@ -1,3 +1,4 @@
+import sys
 import pygame
 
 
@@ -20,33 +21,34 @@ class main_menu:
         self.mouse = pygame.Rect(0, 0, 5, 5)
 
     def setup_nodes(self):
-        self.node1 = pygame.sprite.GroupSingle()
-        self.node2 = pygame.sprite.GroupSingle()
+        self.play = pygame.sprite.GroupSingle()
+        self.quit = pygame.sprite.GroupSingle()
 
         play_button = Node((500, 400))
-        self.node1.add(play_button)
+        self.play.add(play_button)
 
         back_button = Node((500, 500))
-        self.node2.add(back_button)
+        self.quit.add(back_button)
 
     def check_mouse(self):
         self.mouse.center = pygame.mouse.get_pos()
 
-        if self.node1.sprite.rect.colliderect(self.mouse):
-            self.node1.sprite.image.fill('green')
+        if self.play.sprite.rect.colliderect(self.mouse):
+            self.play.sprite.image.fill('green')
             if pygame.mouse.get_pressed()[0]:
                 self.create_overworld(self.current_level, self.max_level)
         else:
-            self.node1.sprite.image.fill('red')
+            self.play.sprite.image.fill('red')
 
-        if self.node2.sprite.rect.colliderect(self.mouse):
-            self.node2.sprite.image.fill('green')
+        if self.quit.sprite.rect.colliderect(self.mouse):
+            self.quit.sprite.image.fill('green')
             if pygame.mouse.get_pressed()[0]:
-                self.create_overworld(self.current_level, self.max_level)
+                pygame.quit()
+                sys.exit()
         else:
-            self.node2.sprite.image.fill('red')
+            self.quit.sprite.image.fill('red')
 
     def run(self):
-        self.node1.draw(self.display_surface)
-        self.node2.draw(self.display_surface)
+        self.play.draw(self.display_surface)
+        self.quit.draw(self.display_surface)
         self.check_mouse()

@@ -1,5 +1,5 @@
 import pygame
-from tiles import Tile, StaticTile
+from tiles import Tile, StaticTile, Collectibles
 from settings import tile_x, tile_y, screen_width, screen_height, speed, jump_speed
 from player import Player
 from support import import_csv_layout, import_cut_graphics
@@ -27,8 +27,8 @@ class Level:
         terrain_layout = import_csv_layout(level_data['terrain'])
         self.terrain_sprites = self.create_tile_group(terrain_layout, 'terrain')
 
-        bars_layout = import_csv_layout(level_data['bars'])
-        self.bars_sprites = self.create_tile_group(bars_layout, 'bars')
+        collectible_layout = import_csv_layout(level_data['collectible'])
+        self.collectible_sprites = self.create_tile_group(collectible_layout, 'collectible')
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -55,15 +55,13 @@ class Level:
                     y = row_index * tile_y
 
                     if type == 'terrain':
-                        terrain_tile_list = import_cut_graphics('../Graphics/Textures/tile.png')
+                        terrain_tile_list = import_cut_graphics(self.current_level['terrain_skin'])
                         tile_surface = terrain_tile_list[int(val)]
                         sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
                         sprite_group.add(sprite)
 
-                    if type == 'bars':
-                        terrain_tile_list = import_cut_graphics('../Graphics/Sprites/Bars.png')
-                        tile_surface = terrain_tile_list[int(val)]
-                        sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
+                    if type == 'collectible':
+                        sprite = Collectibles(tile_x, tile_y, x, y, self.current_level['collectible_skin'])
                         sprite_group.add(sprite)
 
         x = (col_index+1)*tile_x
@@ -79,7 +77,7 @@ class Level:
                 x = col_index * tile_x
                 y = row_index * tile_y
                 if val == '0':
-                    sprite = Player(self.current_level['skin'], (x,y))
+                    sprite = Player(self.current_level['player_skin'], (x,y))
                     self.player.add(sprite)
                 if val == '1':
                     end_tile = pygame.image.load('../Graphics/Character/elof.png')
@@ -112,6 +110,9 @@ class Level:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
 
+    def collectible_collision(self):
+        collided = pygame.sprite.spritecollide(self.player.sprite, self.collectible_sprites, True)
+
     def run(self):
 
         self.input()
@@ -122,9 +123,10 @@ class Level:
         for tile in self.terrain_sprites:
             self.display_surface.blit(tile.image, self.camera.apply(tile))
 
-        self.bars_sprites.update(self.world_shift_x, self.world_shift_y)
-        for tile in self.bars_sprites:
+        self.collectible_sprites.update(self.world_shift_x, self.world_shift_y)
+        for tile in self.collectible_sprites:
             self.display_surface.blit(tile.image, self.camera.apply(tile))
+        self.collectible_collision()
 
         self.horizontal_movement_collision()
         self.vertical_movement_collision()
