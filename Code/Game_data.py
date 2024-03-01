@@ -1,13 +1,13 @@
 level1 = {'terrain': '../Levels/1/Level1_Tile Layer 1.csv',
           'player': '../Levels/1/Level1_player.csv',
-          'bars': '../Levels/1/Level1_bars.csv',
+          'collectible': '../Levels/1/Level1_bars.csv',
           'skin': '../Graphics/Character/fiveselof.png',
           'node_pos': (200, 200),
           'unlock': 1}
 
 level2 = {'terrain': '../Levels/2/Level2_Tile Layer 1.csv',
           'player': '../Levels/2/Level2_player.csv',
-          'bars': '../Levels/2/Level2_bars.csv',
+          'collectible': '../Levels/2/Level2_bars.csv',
           'skin': '../Graphics/Character/ptelof.png',
           'node_pos': (400, 600),
           'unlock': 1}

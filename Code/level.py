@@ -27,8 +27,8 @@ class Level:
         terrain_layout = import_csv_layout(level_data['terrain'])
         self.terrain_sprites = self.create_tile_group(terrain_layout, 'terrain')
 
-        bars_layout = import_csv_layout(level_data['bars'])
-        self.bars_sprites = self.create_tile_group(bars_layout, 'bars')
+        collectible_layout = import_csv_layout(level_data['collectible'])
+        self.collectible_sprites = self.create_tile_group(collectible_layout, 'collectible')
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -60,7 +60,7 @@ class Level:
                         sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
                         sprite_group.add(sprite)
 
-                    if type == 'bars':
+                    if type == 'collectible':
                         sprite = bars(tile_x, tile_y, x, y)
                         sprite_group.add(sprite)
 
@@ -110,8 +110,8 @@ class Level:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
 
-    def check_bar_collision(self):
-        collided_bar = pygame.sprite.spritecollide(self.player.sprite, self.bars_sprites, True)
+    def collectible_collision(self):
+        collided = pygame.sprite.spritecollide(self.player.sprite, self.collectible_sprites, True)
 
     def run(self):
 
@@ -123,10 +123,10 @@ class Level:
         for tile in self.terrain_sprites:
             self.display_surface.blit(tile.image, self.camera.apply(tile))
 
-        self.bars_sprites.update(self.world_shift_x, self.world_shift_y)
-        for tile in self.bars_sprites:
+        self.collectible_sprites.update(self.world_shift_x, self.world_shift_y)
+        for tile in self.collectible_sprites:
             self.display_surface.blit(tile.image, self.camera.apply(tile))
-        self.check_bar_collision()
+        self.collectible_collision()
 
         self.horizontal_movement_collision()
         self.vertical_movement_collision()
