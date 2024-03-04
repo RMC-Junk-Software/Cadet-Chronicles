@@ -17,6 +17,9 @@ class Level:
         self.world_shift_x = 0
         self.world_shift_y = 0
 
+        # temp code
+        self.collected = 0
+
         player_layout = import_csv_layout(level_data['player'])
         self.player = pygame.sprite.GroupSingle()
         self.goal = pygame.sprite.GroupSingle()
@@ -30,20 +33,20 @@ class Level:
         collectible_layout = import_csv_layout(level_data['collectible'])
         self.collectible_sprites = self.create_tile_group(collectible_layout, 'collectible')
 
+        flag_layout = import_csv_layout(level_data['flag'])
+        self.flag_sprite = self.create_tile_group(flag_layout, 'flag')
+
     def input(self):
         keys = pygame.key.get_pressed()
         player = self.player.sprite
 
         if keys[pygame.K_ESCAPE]:
             self.create_overworld(self.current_level, 0)
-        elif pygame.sprite.spritecollide(player, self.goal, False):
+        elif pygame.sprite.spritecollide(player, self.flag_sprite, False):
             if self.new_max_level == 4:
-                # game complete code
                 print("Game complete!")
-            self.create_overworld(self.current_level, self.new_max_level)
-        # death code
-        # elif player.rect.centery < -30:
-        #     self.create_level(self.current_level)
+            if self.collected == 10:
+                self.create_overworld(self.current_level, self.new_max_level)
 
     def create_tile_group(self, layout, type):
         sprite_group = pygame.sprite.Group()
@@ -58,11 +61,16 @@ class Level:
                         terrain_tile_list = import_cut_graphics(self.current_level['terrain_skin'])
                         tile_surface = terrain_tile_list[int(val)]
                         sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
-                        sprite_group.add(sprite)
 
                     if type == 'collectible':
                         sprite = Collectibles(tile_x, tile_y, x, y, self.current_level['collectible_skin'])
-                        sprite_group.add(sprite)
+
+                    if type == 'flag':
+                        flag_tile_list = import_cut_graphics('../Graphics/Sprites/FlagLowered.png')
+                        tile_surface = flag_tile_list[int(val)]
+                        sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
+
+                    sprite_group.add(sprite)
 
         x = (col_index+1)*tile_x
         y = (row_index + 1) * tile_y
@@ -79,11 +87,6 @@ class Level:
                 if val == '0':
                     sprite = Player(self.current_level['player_skin'], (x,y))
                     self.player.add(sprite)
-                if val == '1':
-                    end_tile = pygame.image.load('../Graphics/Character/elof.png')
-                    sprite = StaticTile(tile_x, tile_y, x, y, end_tile)
-                    self.goal.add(sprite)
-
 
     def horizontal_movement_collision(self):
         player = self.player.sprite
@@ -112,6 +115,8 @@ class Level:
 
     def collectible_collision(self):
         collided = pygame.sprite.spritecollide(self.player.sprite, self.collectible_sprites, True)
+        if collided:
+            self.collected += 1
 
     def run(self):
 
@@ -131,9 +136,9 @@ class Level:
         self.horizontal_movement_collision()
         self.vertical_movement_collision()
 
+        self.flag_sprite.update(self.world_shift_x, self.world_shift_y)
+        for tile in self.flag_sprite:
+            self.display_surface.blit(tile.image, self.camera.apply(tile))
+
         self.player.update()
         self.display_surface.blit(self.player.sprite.image, self.camera.apply(self.player.sprite))
-
-        self.goal.update(self.world_shift_x, self.world_shift_y)
-        self.display_surface.blit(self.goal.sprite.image, self.camera.apply(self.goal.sprite))
-

@@ -4,6 +4,7 @@ level1 = {'terrain': '../Levels/1/Level1_Tile Layer 1.csv',
           'player_skin': '../Graphics/Character/fiveselof.png',
           'collectible': '../Levels/1/Level1_bars.csv',
           'collectible_skin': '../Graphics/Sprites/Bars.png',
+          'flag': '../Levels/1/Level1_flag.csv',
           'node_pos': (200, 200),
           'unlock': 1}
 
@@ -13,6 +14,7 @@ level2 = {'terrain': '../Levels/2/Level2_Tile Layer 1.csv',
           'player_skin': '../Graphics/Character/ptelof.png',
           'collectible': '../Levels/2/Level2_bars.csv',
           'collectible_skin': '../Graphics/Sprites/Bars.png',
+          'flag': '../Levels/2/Level2_flag.csv',
           'node_pos': (400, 600),
           'unlock': 1}
 

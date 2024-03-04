@@ -22,7 +22,7 @@ def import_cut_graphics(path):
         for col in range(tile_num_x):
             x = col * tile_x
             y = row * tile_y
-            new_surf = pygame.Surface((tile_x, tile_y))
+            new_surf = pygame.Surface((tile_x, tile_y), flags=pygame.SRCALPHA)
             new_surf.blit(surface, (0,0), pygame.Rect(x, y, tile_x, tile_y))
             cut_tiles.append(new_surf)
     return cut_tiles
