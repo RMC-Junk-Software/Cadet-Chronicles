@@ -45,7 +45,7 @@ class Level:
         elif pygame.sprite.spritecollide(player, self.flag_sprite, False):
             if self.new_max_level == 4:
                 print("Game complete!")
-            if self.collected == 10:
+            if self.collected == 9:
                 self.create_overworld(self.current_level, self.new_max_level)
 
     def create_tile_group(self, layout, type):
