@@ -63,7 +63,10 @@ class Level:
                         sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
 
                     if type == 'collectible':
-                        sprite = Collectibles(tile_x, tile_y, x, y, self.current_level['collectible_skin'])
+                        terrain_tile_list = import_cut_graphics('../Graphics/Sprites/Level1-4CollectiblesV2.png')
+                        tile_surface = terrain_tile_list[int(val)]
+                        sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
+                        #sprite = Collectibles(tile_x, tile_y, x, y, '../Graphics/Sprites/Level1-4CollectiblesV2.png')
 
                     if type == 'flag':
                         flag_tile_list = import_cut_graphics('../Graphics/Sprites/FlagLowered.png')
