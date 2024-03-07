@@ -34,7 +34,8 @@ class Level:
         self.collectible_sprites = self.create_tile_group(collectible_layout, 'collectible')
 
         flag_layout = import_csv_layout(level_data['flag'])
-        self.flag_sprite = self.create_tile_group(flag_layout, 'flag')
+        self.flag_lowered = self.create_tile_group(flag_layout, 'flag_lowered')
+        self.flag_raised = self.create_tile_group(flag_layout, 'flag_raised')
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -42,7 +43,7 @@ class Level:
 
         if keys[pygame.K_ESCAPE]:
             self.create_overworld(self.current_level, 0)
-        elif pygame.sprite.spritecollide(player, self.flag_sprite, False):
+        elif pygame.sprite.spritecollide(player, self.flag_raised, False):
             if self.new_max_level == 4:
                 print("Game complete!")
             if self.collected == 9:
@@ -66,16 +67,20 @@ class Level:
                         terrain_tile_list = import_cut_graphics('../Graphics/Sprites/Level1-4CollectiblesV2.png')
                         tile_surface = terrain_tile_list[int(val)]
                         sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
-                        #sprite = Collectibles(tile_x, tile_y, x, y, '../Graphics/Sprites/Level1-4CollectiblesV2.png')
 
-                    if type == 'flag':
+                    if type == 'flag_lowered':
                         flag_tile_list = import_cut_graphics('../Graphics/Sprites/FlagLowered.png')
+                        tile_surface = flag_tile_list[int(val)]
+                        sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
+
+                    if type == 'flag_raised':
+                        flag_tile_list = import_cut_graphics('../Graphics/Sprites/FlagRaised.png')
                         tile_surface = flag_tile_list[int(val)]
                         sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
 
                     sprite_group.add(sprite)
 
-        x = (col_index+1)*tile_x
+        x = (col_index + 1) * tile_x
         y = (row_index + 1) * tile_y
 
         self.camera = Camera.Camera(Camera.complex_camera, x, y)
@@ -139,9 +144,14 @@ class Level:
         self.horizontal_movement_collision()
         self.vertical_movement_collision()
 
-        self.flag_sprite.update(self.world_shift_x, self.world_shift_y)
-        for tile in self.flag_sprite:
-            self.display_surface.blit(tile.image, self.camera.apply(tile))
+        self.flag_lowered.update(self.world_shift_x, self.world_shift_y)
+        self.flag_raised.update(self.world_shift_x, self.world_shift_y)
+        if self.collected < 9:
+            for tile in self.flag_lowered:
+                self.display_surface.blit(tile.image, self.camera.apply(tile))
+        else:
+            for tile in self.flag_raised:
+                self.display_surface.blit(tile.image, self.camera.apply(tile))
 
         self.player.update()
         self.display_surface.blit(self.player.sprite.image, self.camera.apply(self.player.sprite))
