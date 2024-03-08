@@ -19,6 +19,7 @@ class Level:
         
         # temp code
         self.collected = 0
+        self.collectible_text_rect = pygame.Surface((300,30)).get_rect(topleft=(5,5))
 
         player_layout = import_csv_layout(level_data['player'])
         self.player = pygame.sprite.GroupSingle()
@@ -155,4 +156,8 @@ class Level:
                 self.display_surface.blit(tile.image, self.camera.apply(tile))
 
         self.player.update()
+
+        self.collectible_text = pygame.font.Font("./fonts/EDITIA__.TTF", 25).render(
+            "Colletibles: {collect}/9".format(collect=self.collected), True, (255, 255, 255))
         self.display_surface.blit(self.player.sprite.image, self.camera.apply(self.player.sprite))
+        self.display_surface.blit(self.collectible_text, self.collectible_text_rect)
