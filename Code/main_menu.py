@@ -1,3 +1,4 @@
+import sys
 import pygame
 
 
@@ -20,13 +21,14 @@ class main_menu:
         self.mouse = pygame.Rect(0, 0, 5, 5)
 
     def setup_nodes(self):
-        self.node1 = pygame.sprite.GroupSingle()
-        self.node2 = pygame.sprite.GroupSingle()
+        self.play = pygame.sprite.GroupSingle()
+        self.quit = pygame.sprite.GroupSingle()
 
         self.title_text = pygame.font.Font("./fonts/EDITIA__.TTF", 40).render("Cadet Chronicles: March to the Arch", True, (255, 255, 255))
         self.title_text_rect = self.title_text.get_rect(center=(500, 200))
 
         play_button = Node((500, 400))
+
         self.node1.add(play_button)
         self.Start_Text = pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("Start", True, (255,255,255))
 
@@ -38,27 +40,31 @@ class main_menu:
         self.Exit_text = pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("Exit", True, (255, 255, 255))
         self.exit_text_rect = self.Exit_text.get_rect(center=back_button.rect.center)
 
+
     def check_mouse(self):
         self.mouse.center = pygame.mouse.get_pos()
 
-        if self.node1.sprite.rect.colliderect(self.mouse):
-            self.node1.sprite.image.fill('green')
+        if self.play.sprite.rect.colliderect(self.mouse):
+            self.play.sprite.image.fill('green')
             if pygame.mouse.get_pressed()[0]:
                 self.create_overworld(self.current_level, self.max_level)
         else:
-            self.node1.sprite.image.fill('red')
+            self.play.sprite.image.fill('red')
 
-        if self.node2.sprite.rect.colliderect(self.mouse):
-            self.node2.sprite.image.fill('green')
+        if self.quit.sprite.rect.colliderect(self.mouse):
+            self.quit.sprite.image.fill('green')
             if pygame.mouse.get_pressed()[0]:
-                self.create_overworld(self.current_level, self.max_level)
+                pygame.quit()
+                sys.exit()
         else:
-            self.node2.sprite.image.fill('red')
+            self.quit.sprite.image.fill('red')
 
     def run(self):
+
         self.node1.draw(self.display_surface)
         self.node2.draw(self.display_surface)
         self.display_surface.blit(self.Start_Text, self.start_text_rect)
         self.display_surface.blit(self.Exit_text, self.exit_text_rect)
         self.display_surface.blit(self.title_text, self.title_text_rect)
+
         self.check_mouse()
