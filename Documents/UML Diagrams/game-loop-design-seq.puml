@@ -1,0 +1,82 @@
+@startuml
+!include style.puml
+'autonumber
+
+title Game Loop\n**Design** Sequence Diagram\n
+
+actor Player as p
+participant "overworld" as ov
+participant "main" as m
+participant "level" as lv
+participant "player" as pl
+participant "camera" as c
+participant "display_surface" as ds
+
+m++
+ov++
+p -> ov: Selects a Level
+ov -> m ++: create_level()
+ov --
+create lv
+m --> lv --
+m -> lv ++: run()
+loop while level is not finished
+    lv -> lv ++: input()
+    lv --
+
+    lv -> c ++: update()
+    c -> c++: camera_func()
+    c --
+    c --
+
+    loop for tile in terrain_sprites
+        lv -> ds ++: blit(tile)
+        ds --
+    end
+
+    loop for collectible in collectibles
+        lv -> ds ++: blit(collectible)
+        ds --
+    end
+
+    lv -> lv ++: horizontal_movement_collision()
+        lv -> pl: rect.x += direction.x * speed
+        loop for sprite in terrain_sprites
+        alt if player collides with terrain
+            alt if player is moving to the right
+                lv -> pl: rect.right = terrain.rect.left
+            else if player is moving to the left
+                lv -> pl: rect.left = terrain.rect.right
+           end
+   end
+    lv --
+end
+
+        lv -> lv ++: verticle_movement_collision()
+        lv -> pl ++: apply_gravity()
+        pl --
+        loop for sprite in terrain_sprites
+        alt if player collides with terrain
+            alt if player is moving to the up
+                lv -> pl: rect.top = terrain.rect.bottom
+            else if player is moving to the down
+                lv -> pl: rect.bottom = terrain.rect.top
+                lv -> pl: can_jump = True
+           end
+   end
+    lv --
+
+end
+
+    lv -> pl ++: update()
+    pl -> pl ++: get_input()
+    pl --
+    pl --
+    lv -> ds ++: blit(player)
+    ds --
+
+    lv -> ds ++: blit(goal)
+
+end
+
+@enduml

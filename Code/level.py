@@ -13,10 +13,7 @@ class Level:
         self.display_surface = surface
         self.create_overworld = create_overworld
         self.create_level = create_level
-
-        self.world_shift_x = 0
-        self.world_shift_y = 0
-
+        
         # temp code
         self.collected = 0
 
@@ -132,12 +129,13 @@ class Level:
 
         self.camera.update(self.player.sprite)
 
-        self.terrain_sprites.update(self.world_shift_x, self.world_shift_y)
         for tile in self.terrain_sprites:
             self.display_surface.blit(tile.image, self.camera.apply(tile))
 
+
         self.collectible_sprites.update(self.world_shift_x, self.world_shift_y)
         for tile in self.collectible_sprites:
+
             self.display_surface.blit(tile.image, self.camera.apply(tile))
         self.collectible_collision()
 
