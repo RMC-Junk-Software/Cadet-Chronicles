@@ -5,12 +5,12 @@ from Game_data import levels
 class Node(pygame.sprite.Sprite):
     def __init__(self, pos, status):
         super().__init__()
-        self.image = pygame.Surface((200, 80))
+
         if status == 'available':
-            self.image.fill('red')
+            self.image = pygame.image.load("../UI/UnselectedButtonBubble.png").convert_alpha()
         else:
-            self.image.fill('grey')
-        self.rect = self.image.get_rect(center = pos)
+            self.image = pygame.image.load("../UI/SelectedButtonBubble.png").convert_alpha()
+        self.rect = self.image.get_rect(center=pos)
 
 
 class Overworld:
@@ -42,9 +42,8 @@ class Overworld:
             self.text_rect.append(self.text[index].get_rect(center=node_sprite.rect.center))
 
     def back_button(self):
-        self.back = pygame.sprite.GroupSingle()
-        node_sprite = Node((60,50), 'available')
-
+        self.node_button = pygame.sprite.GroupSingle()
+        node_sprite = Node((100,50), 'available')
         self.node_button.add(node_sprite)
         self.text_rect.append(self.text[4].get_rect(center=node_sprite.rect.center))
 
@@ -62,19 +61,22 @@ class Overworld:
         for index, sprites in enumerate(self.nodes.sprites()):
             if sprites.rect.colliderect(self.mouse):
                 if index <= self.max_level:
-                    sprites.image.fill('green')
+                    sprites.image = pygame.image.load("../UI/SelectedButtonBubble.png").convert_alpha()
                     if pygame.mouse.get_pressed()[0]:
                         self.create_level(levels[index])
-            else:
-                if index <= self.max_level:
-                    sprites.image.fill('red')
 
-        if self.back.sprite.rect.colliderect(self.mouse):
-            self.back.sprite.image.fill('green')
+            else:
+                if index > self.max_level:
+                    sprites.image = pygame.image.load("../UI/SelectedButtonBubble.png").convert_alpha()
+                else:
+                    sprites.image = pygame.image.load("../UI/UnselectedButtonBubble.png").convert_alpha()
+
+        if self.node_button.sprite.rect.colliderect(self.mouse):
+            self.node_button.sprite.image = pygame.image.load("../UI/SelectedButtonBubble.png").convert_alpha()
             if pygame.mouse.get_pressed()[0]:
                 self.create_main_menu(self.current_level, self.max_level)
         else:
-            self.back.sprite.image.fill('red')
+            self.node_button.sprite.image = pygame.image.load("../UI/UnselectedButtonBubble.png").convert_alpha()
 
     def run(self):
         self.draw_paths()
