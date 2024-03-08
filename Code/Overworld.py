@@ -45,7 +45,7 @@ class Overworld:
         self.back = pygame.sprite.GroupSingle()
         node_sprite = Node((60,50), 'available')
 
-        self.node_button.add(node_sprite)
+        self.back.add(node_sprite)
         self.text_rect.append(self.text[4].get_rect(center=node_sprite.rect.center))
 
 
@@ -80,7 +80,7 @@ class Overworld:
         self.draw_paths()
         self.nodes.draw(self.display_surface)
 
-        self.node_button.draw(self.display_surface)
+        self.back.draw(self.display_surface)
         for i in range(len(self.text)):
             self.display_surface.blit(self.text[i], self.text_rect[i])
             

@@ -13,6 +13,9 @@ class Level:
         self.display_surface = surface
         self.create_overworld = create_overworld
         self.create_level = create_level
+
+        self.world_shift_x = 0
+        self.world_shift_y = 0
         
         # temp code
         self.collected = 0

@@ -29,14 +29,14 @@ class main_menu:
 
         play_button = Node((500, 400))
 
-        self.node1.add(play_button)
+        self.play.add(play_button)
         self.Start_Text = pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("Start", True, (255,255,255))
 
         self.start_text_rect = self.Start_Text.get_rect(center=play_button.rect.center)
 
 
         back_button = Node((500, 500))
-        self.node2.add(back_button)
+        self.quit.add(back_button)
         self.Exit_text = pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("Exit", True, (255, 255, 255))
         self.exit_text_rect = self.Exit_text.get_rect(center=back_button.rect.center)
 
@@ -61,8 +61,8 @@ class main_menu:
 
     def run(self):
 
-        self.node1.draw(self.display_surface)
-        self.node2.draw(self.display_surface)
+        self.play.draw(self.display_surface)
+        self.quit.draw(self.display_surface)
         self.display_surface.blit(self.Start_Text, self.start_text_rect)
         self.display_surface.blit(self.Exit_text, self.exit_text_rect)
         self.display_surface.blit(self.title_text, self.title_text_rect)
