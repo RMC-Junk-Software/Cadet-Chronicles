@@ -7,7 +7,7 @@ from main_menu import main_menu
 
 class Game:
     def __init__(self):
-        self.max_level = 1
+        self.max_level = 3
         self.current_level = 0
         self.main_menu = main_menu(self.max_level, self.current_level, screen, self.create_overworld)
         self.status = 'main_menu'

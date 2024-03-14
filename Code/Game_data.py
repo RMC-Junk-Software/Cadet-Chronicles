@@ -23,7 +23,7 @@ level3 = {'terrain': '../Levels/3/Level3_tiles.csv',
           'collectible': '../Levels/3/Level3_collectible.csv',
           'flag': '../Levels/3/Level3_flag.csv',
           'node_pos': (600, 250),
-          'unlock': 2}
+          'unlock': 1}
 
 level4 = {'terrain': '../Levels/4/Level4_tiles.csv',
           'terrain_skin': '../Graphics/Textures/tile.png',
@@ -32,7 +32,7 @@ level4 = {'terrain': '../Levels/4/Level4_tiles.csv',
           'collectible': '../Levels/4/Level4_collectible.csv',
           'flag': '../Levels/4/Level4_flag.csv',
           'node_pos': (850, 550),
-          'unlock': 3}
+          'unlock': 1}
 
 
 levels = {
