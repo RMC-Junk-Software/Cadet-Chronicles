@@ -1,6 +1,6 @@
 import pygame
-from tiles import Tile, StaticTile, Collectibles
-from settings import tile_x, tile_y, screen_width, screen_height, speed, jump_speed
+from tiles import StaticTile
+from settings import tile_x, tile_y
 from player import Player
 from support import import_csv_layout, import_cut_graphics
 import Camera
@@ -14,12 +14,13 @@ class Level:
         self.create_overworld = create_overworld
         self.create_level = create_level
 
-        self.world_shift_x = 0
-        self.world_shift_y = 0
-        
-        # temp code
         self.collected = 0
-        self.collectible_text_rect = pygame.Surface((300,30)).get_rect(topleft=(5,5))
+        self.collectible_text_rect = pygame.Surface((300,30)).get_rect(topleft=(5,40))
+
+        self.health = 3
+        self.invincible = 0
+        self.hurt_time = 0
+        self.health_text_rect = pygame.Surface((300, 30)).get_rect(topleft=(5, 8))
 
         player_layout = import_csv_layout(level_data['player'])
         self.player = pygame.sprite.GroupSingle()
@@ -31,8 +32,14 @@ class Level:
         terrain_layout = import_csv_layout(level_data['terrain'])
         self.terrain_sprites = self.create_tile_group(terrain_layout, 'terrain')
 
+        indoor_layout = import_csv_layout(level_data['indoor'])
+        self.indoor_sprites = self.create_tile_group(indoor_layout, 'indoor')
+
         collectible_layout = import_csv_layout(level_data['collectible'])
         self.collectible_sprites = self.create_tile_group(collectible_layout, 'collectible')
+
+        obstacle_layout = import_csv_layout(level_data['obstacle'])
+        self.obstacle_sprites = self.create_tile_group(obstacle_layout, 'obstacle')
 
         flag_layout = import_csv_layout(level_data['flag'])
         self.flag_lowered = self.create_tile_group(flag_layout, 'flag_lowered')
@@ -49,6 +56,8 @@ class Level:
                 print("Game complete!")
             if self.collected == 9:
                 self.create_overworld(self.current_level, self.new_max_level)
+        elif self.health <= 0:
+            self.create_level(self.current_level)
 
     def create_tile_group(self, layout, type):
         sprite_group = pygame.sprite.Group()
@@ -64,8 +73,18 @@ class Level:
                         tile_surface = terrain_tile_list[int(val)]
                         sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
 
+                    if type == 'indoor':
+                        indoor_tile_list = import_cut_graphics(self.current_level['indoor_skin'])
+                        tile_surface = indoor_tile_list[int(val)]
+                        sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
+
                     if type == 'collectible':
                         terrain_tile_list = import_cut_graphics('../Graphics/Sprites/Level1-4CollectiblesV2.png')
+                        tile_surface = terrain_tile_list[int(val)]
+                        sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
+
+                    if type == 'obstacle':
+                        terrain_tile_list = import_cut_graphics(self.current_level['obstacle_skin'])
                         tile_surface = terrain_tile_list[int(val)]
                         sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
 
@@ -127,6 +146,19 @@ class Level:
         if collided:
             self.collected += 1
 
+    def obstacle_collision(self):
+        player = self.player.sprite
+
+        current_time = pygame.time.get_ticks()
+        if current_time - self.hurt_time >= 1000:
+            self.invincible = 0
+
+        for sprite in self.obstacle_sprites.sprites():
+            if sprite.rect.colliderect(player.rect) and self.invincible == 0:
+                self.health += -1
+                self.invincible = 1
+                self.hurt_time = pygame.time.get_ticks()
+
     def run(self):
 
         self.input()
@@ -136,18 +168,20 @@ class Level:
         for tile in self.terrain_sprites:
             self.display_surface.blit(tile.image, self.camera.apply(tile))
 
-
-        self.collectible_sprites.update(self.world_shift_x, self.world_shift_y)
-        for tile in self.collectible_sprites:
-
+        for tile in self.indoor_sprites:
             self.display_surface.blit(tile.image, self.camera.apply(tile))
-        self.collectible_collision()
+
+        for tile in self.collectible_sprites:
+            self.display_surface.blit(tile.image, self.camera.apply(tile))
+
+        for tile in self.obstacle_sprites:
+            self.display_surface.blit(tile.image, self.camera.apply(tile))
 
         self.horizontal_movement_collision()
         self.vertical_movement_collision()
+        self.collectible_collision()
+        self.obstacle_collision()
 
-        self.flag_lowered.update(self.world_shift_x, self.world_shift_y)
-        self.flag_raised.update(self.world_shift_x, self.world_shift_y)
         if self.collected < 9:
             for tile in self.flag_lowered:
                 self.display_surface.blit(tile.image, self.camera.apply(tile))
@@ -156,8 +190,12 @@ class Level:
                 self.display_surface.blit(tile.image, self.camera.apply(tile))
 
         self.player.update()
+        self.display_surface.blit(self.player.sprite.image, self.camera.apply(self.player.sprite))
 
         self.collectible_text = pygame.font.Font("./fonts/EDITIA__.TTF", 25).render(
             "Colletibles: {collect}/9".format(collect=self.collected), True, (255, 255, 255))
-        self.display_surface.blit(self.player.sprite.image, self.camera.apply(self.player.sprite))
         self.display_surface.blit(self.collectible_text, self.collectible_text_rect)
+
+        self.health_text = pygame.font.Font("./fonts/EDITIA__.TTF", 25).render(
+            "Health: {health}".format(health=self.health), True, (255, 255, 255))
+        self.display_surface.blit(self.health_text, self.health_text_rect)
