@@ -13,12 +13,15 @@ class Level:
         self.display_surface = surface
         self.create_overworld = create_overworld
         self.create_level = create_level
+        self.camera = None
 
+        # Collectibles text
         self.collected = 0
         self.collectible_text = pygame.font.Font("./fonts/EDITIA__.TTF", 25).render(
             "Colletibles: {collect}/9".format(collect=self.collected), True, (255, 255, 255))
         self.collectible_text_rect = pygame.Surface((300,30)).get_rect(topleft=(5,40))
 
+        # Health text
         self.health = 3
         self.health_text = pygame.font.Font("./fonts/EDITIA__.TTF", 25).render(
             "Health: {health}".format(health=self.health), True, (255, 255, 255))
@@ -26,41 +29,46 @@ class Level:
         self.hurt_time = 0
         self.health_text_rect = pygame.Surface((300, 30)).get_rect(topleft=(5, 8))
 
+        # Player sprite
         player_layout = import_csv_layout(level_data['player'])
         self.player = pygame.sprite.GroupSingle()
         self.goal = pygame.sprite.GroupSingle()
         self.player_setup(player_layout)
 
-        self.camera = None
-
+        # Terrain sprites
         terrain_layout = import_csv_layout(level_data['terrain'])
         self.terrain_sprites = self.create_tile_group(terrain_layout, 'terrain')
 
+        # Indoor sprites
         indoor_layout = import_csv_layout(level_data['indoor'])
         self.indoor_sprites = self.create_tile_group(indoor_layout, 'indoor')
 
+        # Collectibles sprites
         collectible_layout = import_csv_layout(level_data['collectible'])
         self.collectible_sprites = self.create_tile_group(collectible_layout, 'collectible')
 
+        # Obstacle sprites
         obstacle_layout = import_csv_layout(level_data['obstacle'])
         self.obstacle_sprites = self.create_tile_group(obstacle_layout, 'obstacle')
 
+        # flag sprites
         flag_layout = import_csv_layout(level_data['flag'])
         self.flag_lowered = self.create_tile_group(flag_layout, 'flag_lowered')
         self.flag_raised = self.create_tile_group(flag_layout, 'flag_raised')
 
+    # Check various inputs
     def input(self):
         keys = pygame.key.get_pressed()
         player = self.player.sprite
 
         if keys[pygame.K_ESCAPE]:
             self.create_overworld(self.current_level, 0)
-        elif pygame.sprite.spritecollide(player, self.flag_raised, False):
+        if pygame.sprite.spritecollide(player, self.flag_raised, False):
             if self.new_max_level == 4:
                 print("Game complete!")
             if self.collected == 9:
                 self.create_overworld(self.current_level, self.new_max_level)
-        elif self.health <= 0:
+        if self.health <= 0:
             self.create_level(self.current_level)
 
     def create_tile_group(self, layout, type):
@@ -173,6 +181,7 @@ class Level:
 
         self.camera.update(self.player.sprite)
 
+        # Update tiles
         for tile in self.terrain_sprites:
             self.display_surface.blit(tile.image, self.camera.apply(tile))
 
@@ -185,11 +194,13 @@ class Level:
         for tile in self.obstacle_sprites:
             self.display_surface.blit(tile.image, self.camera.apply(tile))
 
+        # Collisions
         self.horizontal_movement_collision()
         self.vertical_movement_collision()
         self.collectible_collision()
         self.obstacle_collision()
 
+        # Flag lowered or raised
         if self.collected < 9:
             for tile in self.flag_lowered:
                 self.display_surface.blit(tile.image, self.camera.apply(tile))
@@ -197,8 +208,10 @@ class Level:
             for tile in self.flag_raised:
                 self.display_surface.blit(tile.image, self.camera.apply(tile))
 
+        # Update player
         self.player.update()
         self.display_surface.blit(self.player.sprite.image, self.camera.apply(self.player.sprite))
 
+        # Display HUD
         self.display_surface.blit(self.collectible_text, self.collectible_text_rect)
         self.display_surface.blit(self.health_text, self.health_text_rect)

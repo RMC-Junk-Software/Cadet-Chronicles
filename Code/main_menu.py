@@ -2,6 +2,7 @@ import sys
 import pygame
 
 
+# Allows us to create nodes that act as buttons
 class Node(pygame.sprite.Sprite):
     def __init__(self, pos):
         super().__init__()
@@ -20,6 +21,7 @@ class main_menu:
         self.setup_nodes()
         self.mouse = pygame.Rect(0, 0, 5, 5)
 
+    # Setup play and quit buttons
     def setup_nodes(self):
         self.play = pygame.sprite.GroupSingle()
         self.quit = pygame.sprite.GroupSingle()
@@ -34,13 +36,12 @@ class main_menu:
 
         self.start_text_rect = self.Start_Text.get_rect(center=play_button.rect.center)
 
-
         back_button = Node((500, 250))
         self.quit.add(back_button)
         self.Exit_text = pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("Exit", True, (255, 255, 255))
         self.exit_text_rect = self.Exit_text.get_rect(center=back_button.rect.center)
 
-
+    # Check if mouse is above any buttons
     def check_mouse(self):
         self.mouse.center = pygame.mouse.get_pos()
 

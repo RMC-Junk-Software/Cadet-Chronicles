@@ -1,6 +1,7 @@
 import pygame.sprite
 from settings import speed, gravity, jump_speed
 
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, skin, pos):
         super().__init__()
