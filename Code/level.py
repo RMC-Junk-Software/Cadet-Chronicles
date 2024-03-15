@@ -2,9 +2,11 @@ import pygame
 from tiles import StaticTile
 from settings import tile_x, tile_y
 from player import Player
-from support import import_csv_layout, import_cut_graphics
+from support import import_csv_layout, import_cut_graphics, textOutline
 import Camera
 
+White = (255, 255, 255)
+Black = (10,10,10)
 
 class Level:
     def __init__(self, level_data, surface, create_overworld, create_level):
@@ -14,17 +16,16 @@ class Level:
         self.create_overworld = create_overworld
         self.create_level = create_level
         self.camera = None
+        self.font = pygame.font.Font("./fonts/EDITIA__.TTF", 25)
 
         # Collectibles text
         self.collected = 0
-        self.collectible_text = pygame.font.Font("./fonts/EDITIA__.TTF", 25).render(
-            "Colletibles: {collect}/9".format(collect=self.collected), True, (255, 255, 255))
+        self.collectible_text = textOutline(self.font, "Colletibles: {collect}/9".format(collect=self.collected), White, Black)
         self.collectible_text_rect = pygame.Surface((300,30)).get_rect(topleft=(5,40))
 
         # Health text
         self.health = 3
-        self.health_text = pygame.font.Font("./fonts/EDITIA__.TTF", 25).render(
-            "Health: {health}".format(health=self.health), True, (255, 255, 255))
+        self.health_text = textOutline(self.font, "Health: {health}".format(health=self.health), White, Black)
         self.invincible = 0
         self.hurt_time = 0
         self.health_text_rect = pygame.Surface((300, 30)).get_rect(topleft=(5, 8))
@@ -157,8 +158,8 @@ class Level:
         collided = pygame.sprite.spritecollide(self.player.sprite, self.collectible_sprites, True)
         if collided:
             self.collected += 1
-            self.collectible_text = pygame.font.Font("./fonts/EDITIA__.TTF", 25).render(
-                "Colletibles: {collect}/9".format(collect=self.collected), True, (255, 255, 255))
+            self.collectible_text = textOutline(self.font, "Colletibles: {collect}/9".format(collect=self.collected), White, Black)
+            self.collectible_text_rect = pygame.Surface((300, 30)).get_rect(topleft=(5, 40))
 
     def obstacle_collision(self):
         player = self.player.sprite
@@ -170,8 +171,7 @@ class Level:
         for sprite in self.obstacle_sprites.sprites():
             if sprite.rect.colliderect(player.rect) and self.invincible == 0:
                 self.health += -1
-                self.health_text = pygame.font.Font("./fonts/EDITIA__.TTF", 25).render(
-                    "Health: {health}".format(health=self.health), True, (255, 255, 255))
+                self.health_text = textOutline(self.font, "Health: {health}".format(health=self.health), White, Black)
                 self.invincible = 1
                 self.hurt_time = pygame.time.get_ticks()
 
