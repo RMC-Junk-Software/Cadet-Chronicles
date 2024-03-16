@@ -27,7 +27,9 @@ class Level:
         self.health = 3
         self.health_text = textOutline(self.font, "Health: {health}".format(health=self.health), White, Black)
         self.invincible = 0
+        self.hit = 0
         self.hurt_time = 0
+        self.hurt_time2 = 0
         self.health_text_rect = pygame.Surface((300, 30)).get_rect(topleft=(5, 8))
 
         # Player sprite
@@ -165,15 +167,26 @@ class Level:
         player = self.player.sprite
 
         current_time = pygame.time.get_ticks()
-        if current_time - self.hurt_time >= 1000:
+
+        if current_time - self.hurt_time >= 40 and self.hit == 1:
+            self.invincible = 0
+            if current_time - self.hurt_time >= 60:
+                self.hit = 0
+        if current_time - self.hurt_time2 >= 800 and self.hit == 0:
             self.invincible = 0
 
         for sprite in self.obstacle_sprites.sprites():
             if sprite.rect.colliderect(player.rect) and self.invincible == 0:
-                self.health += -1
-                self.health_text = textOutline(self.font, "Health: {health}".format(health=self.health), White, Black)
-                self.invincible = 1
-                self.hurt_time = pygame.time.get_ticks()
+                if self.hit == 1:
+                    self.health += -1
+                    self.health_text = textOutline(self.font, "Health: {health}".format(health=self.health), White, Black)
+                    self.invincible = 1
+                    self.hit = 0
+                    self.hurt_time2 = pygame.time.get_ticks()
+                else:
+                    self.invincible = 1
+                    self.hit = 1
+                    self.hurt_time = pygame.time.get_ticks()
 
     def run(self):
 
