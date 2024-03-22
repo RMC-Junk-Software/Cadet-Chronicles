@@ -69,7 +69,7 @@ class main_menu:
         if self.instructions.sprite.rect.colliderect(self.mouse):
             self.instructions.sprite.image = pygame.image.load("../UI/SelectedButtonBubble.png").convert_alpha()
 
-            # create an instruction window that is shown by hovoring over it
+            # create an instruction window that is shown by hovering over it
             instruction_window = pygame.image.load("../UI/Instructions_test_window.png")
             self.display_surface.blit(instruction_window, (0, 0))
 
