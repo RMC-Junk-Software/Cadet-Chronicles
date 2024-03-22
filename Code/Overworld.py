@@ -15,12 +15,14 @@ class Node(pygame.sprite.Sprite):
 
 
 class Overworld:
-    def __init__(self, current_level, max_level, surface, create_level, create_main_menu):
+    def __init__(self, current_level, max_level, surface, create_level, create_main_menu, lives):
 
         self.current_level = current_level
         self.max_level = max_level
         self.display_surface = surface
-        self.text = [pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("1st Year", True, (255, 255, 255)),pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("2nd Year", True, (255, 255, 255)),pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("3rd Year", True, (255, 255, 255)),pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("4th Year", True, (255, 255, 255)),pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("Back", True, (255, 255, 255))]
+        self.lives = lives
+
+        self.text = [pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("1st Year", True, (255, 255, 255)),pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("2nd Year", True, (255, 255, 255)),pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("3rd Year", True, (255, 255, 255)),pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("4th Year", True, (255, 255, 255)),pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("Back", True, (255, 255, 255)),pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("lives: {lives}/2".format(lives=self.lives), True, (255, 255, 255))]
         self.text_rect = []
 
         self.create_level = create_level
@@ -29,6 +31,8 @@ class Overworld:
 
         self.setup_nodes()
         self.back_button()
+        self.lives_text()
+        self.time = pygame.time.get_ticks()
 
     # Setup buttons for each level
     def setup_nodes(self):
@@ -50,6 +54,13 @@ class Overworld:
         self.back.add(node_sprite)
         self.text_rect.append(self.text[4].get_rect(center=node_sprite.rect.center))
 
+    # Setup lives text
+    def lives_text(self):
+        self.life = pygame.sprite.GroupSingle()
+        node_sprite = Node((500, 50), 'locked')
+        self.life.add(node_sprite)
+        self.text_rect.append(self.text[5].get_rect(center=node_sprite.rect.center))
+
     # Create green and red paths between levels
     def draw_paths(self):
         if self.max_level > 0:
@@ -67,7 +78,7 @@ class Overworld:
                 if index <= self.max_level:
                     sprites.image = pygame.image.load("../UI/SelectedButtonBubble.png").convert_alpha()
                     if pygame.mouse.get_pressed()[0]:
-                        self.create_level(levels[index])
+                        self.create_level(levels[index], self.lives)
             else:
                 if index > self.max_level:
                     sprites.image = pygame.image.load("../UI/SelectedButtonBubble.png").convert_alpha()
@@ -77,7 +88,7 @@ class Overworld:
         if self.back.sprite.rect.colliderect(self.mouse):
             self.back.sprite.image = pygame.image.load("../UI/SelectedButtonBubble.png").convert_alpha()
             if pygame.mouse.get_pressed()[0]:
-                self.create_main_menu(self.current_level, self.max_level)
+                self.create_main_menu(self.current_level, self.max_level, self.lives, 0)
         else:
             self.back.sprite.image = pygame.image.load("../UI/UnselectedButtonBubble.png").convert_alpha()
 
@@ -86,7 +97,11 @@ class Overworld:
         self.nodes.draw(self.display_surface)
 
         self.back.draw(self.display_surface)
+        self.life.draw(self.display_surface)
         for i in range(len(self.text)):
             self.display_surface.blit(self.text[i], self.text_rect[i])
-            
-        self.check_mouse()
+
+        current_time = pygame.time.get_ticks()
+        time = current_time - self.time
+        if time > 300:
+            self.check_mouse()

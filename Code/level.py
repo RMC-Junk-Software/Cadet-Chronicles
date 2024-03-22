@@ -1,20 +1,26 @@
 import pygame
-from tiles import StaticTile
+from tiles import StaticTile, Tile
 from settings import tile_x, tile_y
 from player import Player
 from support import import_csv_layout, import_cut_graphics, textOutline
+from pause import Pause
+from enemies import Enemy
 import Camera
 
 White = (255, 255, 255)
 Black = (10,10,10)
 
+
 class Level:
-    def __init__(self, level_data, surface, create_overworld, create_level):
+    def __init__(self, level_data, surface, create_overworld, create_level, create_main_menu, lives):
         self.current_level = level_data
         self.new_max_level = level_data['unlock']
         self.display_surface = surface
         self.create_overworld = create_overworld
         self.create_level = create_level
+        self.create_main_menu = create_main_menu
+        self.lives = lives
+
         self.camera = None
         self.font = pygame.font.Font("./fonts/EDITIA__.TTF", 25)
 
@@ -54,6 +60,14 @@ class Level:
         obstacle_layout = import_csv_layout(level_data['obstacle'])
         self.obstacle_sprites = self.create_tile_group(obstacle_layout, 'obstacle')
 
+        # Enemy sprites
+        enemy_layout = import_csv_layout(level_data['enemy'])
+        self.enemy_sprites = self.create_tile_group(enemy_layout, 'enemy')
+
+        # Constraints sprites
+        constraint_layout = import_csv_layout(level_data['constraint'])
+        self.constraint_sprites = self.create_tile_group(constraint_layout, 'constraint')
+
         # flag sprites
         flag_layout = import_csv_layout(level_data['flag'])
         self.flag_lowered = self.create_tile_group(flag_layout, 'flag_lowered')
@@ -65,14 +79,20 @@ class Level:
         player = self.player.sprite
 
         if keys[pygame.K_ESCAPE]:
-            self.create_overworld(self.current_level, 0)
+            Pause(self.current_level, self.new_max_level, self.display_surface, self.lives, self.create_overworld, self.create_main_menu, 'pause')
         if pygame.sprite.spritecollide(player, self.flag_raised, False):
-            if self.new_max_level == 4:
-                print("Game complete!")
-            if self.collected == 9:
-                self.create_overworld(self.current_level, self.new_max_level)
-        if self.health <= 0:
-            self.create_level(self.current_level)
+            if self.collected >= 9:
+                if self.new_max_level == 4:
+                    Pause(self.current_level, self.new_max_level, self.display_surface, self.lives,
+                          self.create_overworld, self.create_main_menu, 'winner')
+                else:
+                    self.create_overworld(self.current_level, self.new_max_level, self.lives)
+        if self.health <= 0 and self.lives == 2:
+            Pause(self.current_level, self.new_max_level, self.display_surface, self.lives - 1, self.create_overworld,
+                  self.create_main_menu, 'LOP')
+        if self.health <= 0 and self.lives == 1:
+            Pause(self.current_level, self.new_max_level, self.display_surface, self.lives - 1, self.create_overworld,
+                  self.create_main_menu, 'dead')
 
     def create_tile_group(self, layout, type):
         sprite_group = pygame.sprite.Group()
@@ -103,6 +123,13 @@ class Level:
                         tile_surface = terrain_tile_list[int(val)]
                         sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
 
+                    if type == 'enemy':
+                        skin = pygame.image.load(self.current_level['enemy_skin'])
+                        sprite = Enemy(tile_x, tile_y, x, y, skin)
+
+                    if type == 'constraint':
+                        sprite = Tile(tile_x, tile_y, x, y)
+
                     if type == 'flag_lowered':
                         flag_tile_list = import_cut_graphics('../Graphics/Sprites/FlagLowered.png')
                         tile_surface = flag_tile_list[int(val)]
@@ -119,7 +146,6 @@ class Level:
         y = (row_index + 1) * tile_y
 
         self.camera = Camera.Camera(Camera.complex_camera, x, y)
-
         return sprite_group
 
     def player_setup(self, layout):
@@ -163,7 +189,7 @@ class Level:
             self.collectible_text = textOutline(self.font, "Colletibles: {collect}/9".format(collect=self.collected), White, Black)
             self.collectible_text_rect = pygame.Surface((300, 30)).get_rect(topleft=(5, 40))
 
-    def obstacle_collision(self):
+    def damage_collision(self, x_sprites):
         player = self.player.sprite
 
         current_time = pygame.time.get_ticks()
@@ -175,11 +201,12 @@ class Level:
         if current_time - self.hurt_time2 >= 800 and self.hit == 0:
             self.invincible = 0
 
-        for sprite in self.obstacle_sprites.sprites():
+        for sprite in x_sprites.sprites():
             if sprite.rect.colliderect(player.rect) and self.invincible == 0:
                 if self.hit == 1:
                     self.health += -1
-                    self.health_text = textOutline(self.font, "Health: {health}".format(health=self.health), White, Black)
+                    self.health_text = textOutline(self.font, "Health: {health}".format(health=self.health), White,
+                                                   Black)
                     self.invincible = 1
                     self.hit = 0
                     self.hurt_time2 = pygame.time.get_ticks()
@@ -187,6 +214,11 @@ class Level:
                     self.invincible = 1
                     self.hit = 1
                     self.hurt_time = pygame.time.get_ticks()
+
+    def enemy_collision_reverse(self):
+        for enemy in self.enemy_sprites.sprites():
+            if pygame.sprite.spritecollide(enemy, self.constraint_sprites, False):
+                enemy.reverse()
 
     def run(self):
 
@@ -207,11 +239,19 @@ class Level:
         for tile in self.obstacle_sprites:
             self.display_surface.blit(tile.image, self.camera.apply(tile))
 
+        for tile in self.enemy_sprites:
+            self.display_surface.blit(tile.image, self.camera.apply(tile))
+
         # Collisions
         self.horizontal_movement_collision()
         self.vertical_movement_collision()
         self.collectible_collision()
-        self.obstacle_collision()
+        self.damage_collision(self.obstacle_sprites)
+        self.damage_collision(self.enemy_sprites)
+
+        # Enemies
+        self.enemy_sprites.update()
+        self.enemy_collision_reverse()
 
         # Flag lowered or raised
         if self.collected < 9:
