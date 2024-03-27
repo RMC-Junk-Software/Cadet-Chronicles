@@ -97,6 +97,11 @@ class Level:
     def create_tile_group(self, layout, type):
         sprite_group = pygame.sprite.Group()
 
+        if type == 'terrain':
+            terrain_tile_list = import_cut_graphics(self.current_level['terrain_skin'])
+        if type == 'indoor':
+            indoor_tile_list = import_cut_graphics(self.current_level['indoor_skin'])
+
         for row_index, row in enumerate(layout):
             for col_index, val in enumerate(row):
                 if val != '-1':
@@ -104,12 +109,10 @@ class Level:
                     y = row_index * tile_y
 
                     if type == 'terrain':
-                        terrain_tile_list = import_cut_graphics(self.current_level['terrain_skin'])
                         tile_surface = terrain_tile_list[int(val)]
                         sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
 
                     if type == 'indoor':
-                        indoor_tile_list = import_cut_graphics(self.current_level['indoor_skin'])
                         tile_surface = indoor_tile_list[int(val)]
                         sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
 
