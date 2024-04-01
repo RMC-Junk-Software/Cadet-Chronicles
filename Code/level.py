@@ -225,6 +225,9 @@ class Level:
 
     def run(self):
 
+        bg = pygame.image.load('../Graphics/Textures/bg.png').convert()
+        self.display_surface.blit(bg, (0, 0))
+
         self.input()
 
         self.camera.update(self.player.sprite)

@@ -93,6 +93,10 @@ class Overworld:
             self.back.sprite.image = pygame.image.load("../UI/UnselectedButtonBubble.png").convert_alpha()
 
     def run(self):
+
+        bg = pygame.image.load('../Graphics/Textures/bg.png').convert()
+        self.display_surface.blit(bg, (0, 0))
+
         self.draw_paths()
         self.nodes.draw(self.display_surface)
 

@@ -53,10 +53,6 @@ while True:
                 pygame.quit()
                 sys.exit()
 
-        # Background
-        bg = pygame.image.load('../Graphics/Textures/bg.png').convert()
-        screen.blit(bg, (0,0))
-
         game.run()
 
         pygame.display.update()
