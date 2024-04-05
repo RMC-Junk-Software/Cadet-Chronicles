@@ -27,7 +27,9 @@ class Level:
         self.hurt_sound = pygame.mixer.Sound("../Sounds/Injure.wav")
         self.death_sound = pygame.mixer.Sound("../Sounds/Death.mp3")
 
-
+        pygame.mixer.music.set_volume(.2)
+        pygame.mixer.music.load(level_data['music'])
+        pygame.mixer.music.play(-1)
 
         self.camera = None
         self.font = pygame.font.Font("./fonts/EDITIA__.TTF", 25)
