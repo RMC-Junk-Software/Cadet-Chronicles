@@ -70,7 +70,7 @@ class main_menu:
             self.instructions.sprite.image = pygame.image.load("../UI/SelectedButtonBubble.png").convert_alpha()
 
             # create an instruction window that is shown by hovering over it
-            instruction_window = pygame.image.load("../UI/Instructions_test_window.png")
+            instruction_window = pygame.image.load("../Graphics/Textures/CChowtoplay.png")
             self.display_surface.blit(instruction_window, (0, 0))
 
         else:
