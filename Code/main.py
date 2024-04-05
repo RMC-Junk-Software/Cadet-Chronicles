@@ -12,6 +12,7 @@ class Game:
         self.lives = 2
         self.main_menu = main_menu(self.current_level, self.max_level, screen, self.create_overworld, self.lives)
         self.status = 'main_menu'
+        self.level = None
 
     # Creates a level
     def create_level(self, current_level, lives):
@@ -46,12 +47,17 @@ pygame.init()
 screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 game = Game()
+clock = pygame.time.Clock()
+pygame.time.set_timer(pygame.USEREVENT + 1, 1000)
 
 while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            elif event.type == pygame.USEREVENT + 1:
+                if game.level is not None:
+                    game.level.updatetimer()
 
         game.run()
 

@@ -10,7 +10,6 @@ import Camera
 White = (255, 255, 255)
 Black = (10,10,10)
 
-
 class Level:
     def __init__(self, level_data, surface, create_overworld, create_level, create_main_menu, lives):
         self.current_level = level_data
@@ -20,6 +19,7 @@ class Level:
         self.create_level = create_level
         self.create_main_menu = create_main_menu
         self.lives = lives
+
 
         self.camera = None
         self.font = pygame.font.Font("./fonts/EDITIA__.TTF", 25)
@@ -37,6 +37,12 @@ class Level:
         self.hurt_time = 0
         self.hurt_time2 = 0
         self.health_text_rect = pygame.Surface((300, 30)).get_rect(topleft=(5, 8))
+
+        #timer text
+        self.timer = 0
+        self.timer_text = textOutline(self.font, "Time: {time}".format(time=self.timer),
+                                            White, Black)
+        self.timer_text_rect = pygame.Surface((300, 30)).get_rect(topleft=(5, 70))
 
         # Player sprite
         player_layout = import_csv_layout(level_data['player'])
@@ -226,6 +232,12 @@ class Level:
             if pygame.sprite.spritecollide(enemy, self.constraint_sprites, False):
                 enemy.reverse()
 
+    def updatetimer(self):
+        self.timer += 1
+        self.timer_text = textOutline(self.font, "Time: {time}".format(time=self.timer),
+                                      White, Black)
+        self.timer_text_rect = pygame.Surface((300, 30)).get_rect(topleft=(5, 70))
+
     def run(self):
 
         self.display_surface.blit(self.bg, (0, 0))
@@ -276,3 +288,4 @@ class Level:
         # Display HUD
         self.display_surface.blit(self.collectible_text, self.collectible_text_rect)
         self.display_surface.blit(self.health_text, self.health_text_rect)
+        self.display_surface.blit(self.timer_text, self.timer_text_rect)
