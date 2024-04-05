@@ -22,6 +22,7 @@ class Pause:
         self.status = status
 
         self.title = ''
+        self.title_pos = (500, 50)
         self.button1 = ''
         self.button1_pos = (0,0)
         self.button2 = ''
@@ -29,9 +30,9 @@ class Pause:
         if self.status == 'pause':
             self.title = 'Paused'
             self.button1 = 'Continue'
-            self.button1_pos = (300, 350)
+            self.button1_pos = (350, 340)
             self.button2 = 'Levels'
-            self.button2_pos = (700, 350)
+            self.button2_pos = (650, 340)
         elif self.status == 'LOP':
             self.title = 'You Failed'
             self.button1 = 'LOP'
@@ -40,8 +41,9 @@ class Pause:
             self.button2_pos = (700, 350)
         elif self.status == 'winner':
             self.title = 'You Graduated!'
+            self.title_pos = (500, 300)
             self.button1 = 'Main Menu'
-            self.button1_pos = (500, 350)
+            self.button1_pos = (500, 500)
         elif self.status == 'dead':
             self.title = 'You Failed Out'
             self.button1 = 'Main Menu'
@@ -61,9 +63,6 @@ class Pause:
                     pygame.quit()
                     sys.exit()
 
-            bg = pygame.image.load('../Graphics/Textures/bg.png').convert()
-            self.screen.blit(bg, (0, 0))
-
             self.run()
 
             pygame.display.update()
@@ -73,17 +72,17 @@ class Pause:
         self.play = pygame.sprite.GroupSingle()
         self.back = pygame.sprite.GroupSingle()
 
-        self.title_text = pygame.font.Font("./fonts/EDITIA__.TTF", 40).render(self.title, True, (255, 255, 255))
-        self.title_text_rect = self.title_text.get_rect(center=(500, 50))
+        self.title_text = pygame.font.Font("./fonts/EDITIA__.TTF", 60).render(self.title, True, (255, 255, 255))
+        self.title_text_rect = self.title_text.get_rect(center=self.title_pos)
 
         play_button = Node(self.button1_pos)
         self.play.add(play_button)
-        self.Start_Text = pygame.font.Font("./fonts/EDITIA__.TTF", 30).render(self.button1, True, (255,255,255))
+        self.Start_Text = pygame.font.Font("./fonts/EDITIA__.TTF", 25).render(self.button1, True, (255,255,255))
         self.start_text_rect = self.Start_Text.get_rect(center=play_button.rect.center)
 
         back_button = Node(self.button2_pos)
         self.back.add(back_button)
-        self.Exit_text = pygame.font.Font("./fonts/EDITIA__.TTF", 30).render(self.button2, True, (255, 255, 255))
+        self.Exit_text = pygame.font.Font("./fonts/EDITIA__.TTF", 25).render(self.button2, True, (255, 255, 255))
         self.exit_text_rect = self.Exit_text.get_rect(center=back_button.rect.center)
 
     def check_mouse(self):
@@ -125,17 +124,14 @@ class Pause:
     def run(self):
 
         if self.status == 'pause':
-            bg = pygame.image.load('../Graphics/Textures/bg.png').convert()
-            self.display_surface.blit(bg, (0, 0))
+            bg = pygame.image.load('../Graphics/Textures/Backgrounds/Pause_bg.png').convert()
         elif self.status == 'LOP':
-            bg = pygame.image.load('../Graphics/Textures/bg.png').convert()
-            self.display_surface.blit(bg, (0, 0))
+            bg = pygame.image.load('../Graphics/Textures/Backgrounds/bg.png').convert()
         elif self.status == 'winner':
-            bg = pygame.image.load('../Graphics/Textures/bg.png').convert()
-            self.display_surface.blit(bg, (0, 0))
+            bg = pygame.image.load('../Graphics/Textures/Backgrounds/Winner_bg.png').convert()
         elif self.status == 'dead':
-            bg = pygame.image.load('../Graphics/Textures/bg.png').convert()
-            self.display_surface.blit(bg, (0, 0))
+            bg = pygame.image.load('../Graphics/Textures/Backgrounds/bg.png').convert()
+        self.display_surface.blit(bg, (0, 0))
 
         self.play.draw(self.display_surface)
         if self.status == 'pause' or self.status == 'LOP':

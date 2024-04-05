@@ -94,7 +94,7 @@ class Overworld:
 
     def run(self):
 
-        bg = pygame.image.load('../Graphics/Textures/bg.png').convert()
+        bg = pygame.image.load('../Graphics/Textures/Backgrounds/bg.png').convert()
         self.display_surface.blit(bg, (0, 0))
 
         self.draw_paths()

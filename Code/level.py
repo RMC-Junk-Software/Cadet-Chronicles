@@ -26,7 +26,7 @@ class Level:
 
         # Collectibles text
         self.collected = 0
-        self.collectible_text = textOutline(self.font, "Colletibles: {collect}/9".format(collect=self.collected), White, Black)
+        self.collectible_text = textOutline(self.font, "Collectibles: {collect}/9".format(collect=self.collected), White, Black)
         self.collectible_text_rect = pygame.Surface((300,30)).get_rect(topleft=(5,40))
 
         # Health text
@@ -68,10 +68,13 @@ class Level:
         constraint_layout = import_csv_layout(level_data['constraint'])
         self.constraint_sprites = self.create_tile_group(constraint_layout, 'constraint')
 
-        # flag sprites
+        # Flag sprites
         flag_layout = import_csv_layout(level_data['flag'])
         self.flag_lowered = self.create_tile_group(flag_layout, 'flag_lowered')
         self.flag_raised = self.create_tile_group(flag_layout, 'flag_raised')
+
+        # Background
+        self.bg = pygame.image.load(level_data['background']).convert()
 
     # Check various inputs
     def input(self):
@@ -225,8 +228,7 @@ class Level:
 
     def run(self):
 
-        bg = pygame.image.load('../Graphics/Textures/bg.png').convert()
-        self.display_surface.blit(bg, (0, 0))
+        self.display_surface.blit(self.bg, (0, 0))
 
         self.input()
 
