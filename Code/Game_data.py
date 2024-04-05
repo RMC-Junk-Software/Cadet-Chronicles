@@ -11,6 +11,7 @@ level1 = {'terrain': '../Levels/1/Level1_tiles.csv',
           'enemy_skin': '../Graphics/Character/elof.png',
           'constraint': '../Levels/1/Level1_constraint.csv',
           'flag': '../Levels/1/Level1_flag.csv',
+          'background': '../Graphics/Textures/Backgrounds/bg.png',
           'node_pos': (200, 200),
           'unlock': 1}
 
@@ -27,6 +28,7 @@ level2 = {'terrain': '../Levels/2/Level2_tiles.csv',
           'enemy_skin': '../Graphics/Character/elof.png',
           'constraint': '../Levels/2/Level2_constraint.csv',
           'flag': '../Levels/2/Level2_flag.csv',
+          'background': '../Graphics/Textures/Backgrounds/Level2_bg.png',
           'node_pos': (400, 600),
           'unlock': 2}
 
@@ -43,6 +45,7 @@ level3 = {'terrain': '../Levels/3/Level3_tiles.csv',
           'enemy_skin': '../Graphics/Character/MP.png',
           'constraint': '../Levels/3/Level3_constraint.csv',
           'flag': '../Levels/3/Level3_flag.csv',
+          'background': '../Graphics/Textures/Backgrounds/Level3_bg.png',
           'node_pos': (600, 250),
           'unlock': 3}
 
@@ -59,6 +62,7 @@ level4 = {'terrain': '../Levels/4/Level4_tiles.csv',
           'enemy_skin': '../Graphics/Character/MP.png',
           'constraint': '../Levels/4/Level4_constraint.csv',
           'flag': '../Levels/4/Level4_flag.csv',
+          'background': '../Graphics/Textures/Backgrounds/bg.png',
           'node_pos': (850, 550),
           'unlock': 4}
 

@@ -6,7 +6,7 @@ from random import randint
 class Enemy(StaticTile):
     def __init__(self, size_x, size_y, x, y, path):
         super().__init__(size_x, size_y, x, y, path)
-        self.speed = randint(4, 5)
+        self.speed = randint(3, 5)
         self.orientation = 'left'
 
     def move(self):
