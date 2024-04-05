@@ -41,7 +41,7 @@ class Game:
 
 
     def play_precision(self):
-        pygame.mixer.music.set_volume(1)
+        pygame.mixer.music.set_volume(0.7)
         pygame.mixer.music.load("../Sounds/Beep_Boop_Precision.mp3")
         pygame.mixer.music.play(-1)
 
