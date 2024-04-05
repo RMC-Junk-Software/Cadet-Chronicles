@@ -1,5 +1,6 @@
 import sys
 import pygame
+from support import textOutline
 
 
 # Allows us to create nodes that act as buttons
@@ -22,6 +23,7 @@ class main_menu:
         self.setup_nodes()
         self.mouse = pygame.Rect(0, 0, 5, 5)
         self.time = pygame.time.get_ticks()
+
 
     # Setup play and quit buttons
     def setup_nodes(self):

@@ -20,6 +20,14 @@ class Level:
         self.create_main_menu = create_main_menu
         self.lives = lives
 
+        # Sounds
+
+        self.collect_sound = pygame.mixer.Sound("../Sounds/Collect.mp3")
+        self.last_collect_sound = pygame.mixer.Sound("../Sounds/Final_Collect.mp3")
+        self.hurt_sound = pygame.mixer.Sound("../Sounds/Injure.wav")
+        self.death_sound = pygame.mixer.Sound("../Sounds/Death.mp3")
+
+
 
         self.camera = None
         self.font = pygame.font.Font("./fonts/EDITIA__.TTF", 25)
@@ -97,6 +105,7 @@ class Level:
                 else:
                     self.create_overworld(self.current_level, self.new_max_level, self.lives)
         if self.health <= 0 and self.lives == 2:
+            self.death_sound.play()
             Pause(self.current_level, self.new_max_level, self.display_surface, self.lives - 1, self.create_overworld,
                   self.create_main_menu, 'LOP')
         if self.health <= 0 and self.lives == 1:
@@ -197,6 +206,10 @@ class Level:
     def collectible_collision(self):
         collided = pygame.sprite.spritecollide(self.player.sprite, self.collectible_sprites, True)
         if collided:
+            if self.collected < 8:
+                self.collect_sound.play()
+            else:
+                self.last_collect_sound.play()
             self.collected += 1
             self.collectible_text = textOutline(self.font, "Colletibles: {collect}/9".format(collect=self.collected), White, Black)
             self.collectible_text_rect = pygame.Surface((300, 30)).get_rect(topleft=(5, 40))
@@ -216,6 +229,7 @@ class Level:
         for sprite in x_sprites.sprites():
             if sprite.rect.colliderect(player.rect) and self.invincible == 0:
                 if self.hit == 1:
+                    self.hurt_sound.play()
                     self.health += -1
                     self.health_text = textOutline(self.font, "Health: {health}".format(health=self.health), White,
                                                    Black)
