@@ -17,9 +17,9 @@ level1 = {'terrain': '../Levels/1/Level1_tiles.csv',
           'unlock': 1}
 
 level2 = {'terrain': '../Levels/2/Level2_tiles.csv',
-          'terrain_skin': '../Graphics/Textures/tile.png',
+          'terrain_skin': '../Graphics/Textures/Level2_tiles/Lvl2Floor.png',
           'indoor': '../Levels/2/Level2_indoor.csv',
-          'indoor_skin': '../Graphics/Textures/Level1_tiles/Lvl1TilesV1.png',
+          'indoor_skin': '../Graphics/Textures/Level2_tiles/Lvl2Background.png',
           'player': '../Levels/2/Level2_player.csv',
           'player_skin': '../Graphics/Character/ptelof.png',
           'collectible': '../Levels/2/Level2_collectible.csv',
