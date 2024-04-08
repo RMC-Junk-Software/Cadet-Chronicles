@@ -12,7 +12,7 @@ level1 = {'terrain': '../Levels/1/Level1_tiles.csv',
           'music': '../Sounds/Magic Scout - Farm.mp3',
           'constraint': '../Levels/1/Level1_constraint.csv',
           'flag': '../Levels/1/Level1_flag.csv',
-          'background': '../Graphics/Textures/Backgrounds/bg.png',
+          'background': '../Graphics/Textures/Backgrounds/Level1_bg.png',
           'node_pos': (200, 200),
           'unlock': 1}
 
@@ -66,7 +66,7 @@ level4 = {'terrain': '../Levels/4/Level4_tiles.csv',
           'music': '../Sounds/French.mp3',
           'constraint': '../Levels/4/Level4_constraint.csv',
           'flag': '../Levels/4/Level4_flag.csv',
-          'background': '../Graphics/Textures/Backgrounds/bg.png',
+          'background': '../Graphics/Textures/Backgrounds/Level4_bg.png',
           'node_pos': (850, 550),
           'unlock': 4}
 

@@ -126,11 +126,11 @@ class Pause:
         if self.status == 'pause':
             bg = pygame.image.load('../Graphics/Textures/Backgrounds/Pause_bg.png').convert()
         elif self.status == 'LOP':
-            bg = pygame.image.load('../Graphics/Textures/Backgrounds/bg.png').convert()
+            bg = pygame.image.load('../Graphics/Textures/Backgrounds/Levels_bg.png').convert()
         elif self.status == 'winner':
             bg = pygame.image.load('../Graphics/Textures/Backgrounds/Winner_bg.png').convert()
         elif self.status == 'dead':
-            bg = pygame.image.load('../Graphics/Textures/Backgrounds/bg.png').convert()
+            bg = pygame.image.load('../Graphics/Textures/Backgrounds/Levels_bg.png').convert()
         self.display_surface.blit(bg, (0, 0))
 
         self.play.draw(self.display_surface)
