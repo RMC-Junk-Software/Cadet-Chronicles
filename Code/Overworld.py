@@ -3,14 +3,25 @@ from Game_data import levels
 
 
 # Allows us to create nodes that act as buttons for each level
+class Node_levels(pygame.sprite.Sprite):
+    def __init__(self, pos, status, current_level):
+        super().__init__()
+
+        if status == 'available':
+            self.image = pygame.image.load(current_level['unselected_button']).convert_alpha()
+        else:
+            self.image = pygame.image.load(current_level['selected_button']).convert_alpha()
+        self.rect = self.image.get_rect(center=pos)
+
+
 class Node(pygame.sprite.Sprite):
     def __init__(self, pos, status):
         super().__init__()
 
         if status == 'available':
-            self.image = pygame.image.load("../UI/UnselectedButtonBubble.png").convert_alpha()
+            self.image = pygame.image.load('../UI/UnselectedButtonBubble.png').convert_alpha()
         else:
-            self.image = pygame.image.load("../UI/SelectedButtonBubble.png").convert_alpha()
+            self.image = pygame.image.load('../UI/SelectedButtonBubble.png').convert_alpha()
         self.rect = self.image.get_rect(center=pos)
 
 
@@ -39,10 +50,11 @@ class Overworld:
         self.nodes = pygame.sprite.Group()
 
         for index, node_data in enumerate(levels.values()):
+            current_level = levels[index]
             if index <= self.max_level:
-                node_sprite = Node(node_data['node_pos'], 'available')
+                node_sprite = Node_levels(node_data['node_pos'], 'available', current_level)
             else:
-                node_sprite = Node(node_data['node_pos'], 'locked')
+                node_sprite = Node_levels(node_data['node_pos'], 'locked', current_level)
             self.nodes.add(node_sprite)
 
             self.text_rect.append(self.text[index].get_rect(center=node_sprite.rect.center))
@@ -74,16 +86,17 @@ class Overworld:
     def check_mouse(self):
         self.mouse.center = pygame.mouse.get_pos()
         for index, sprites in enumerate(self.nodes.sprites()):
+            current_level = levels[index]
             if sprites.rect.colliderect(self.mouse):
                 if index <= self.max_level:
-                    sprites.image = pygame.image.load("../UI/SelectedButtonBubble.png").convert_alpha()
+                    sprites.image = pygame.image.load(current_level['selected_button']).convert_alpha()
                     if pygame.mouse.get_pressed()[0]:
                         self.create_level(levels[index], self.lives)
             else:
                 if index > self.max_level:
-                    sprites.image = pygame.image.load("../UI/SelectedButtonBubble.png").convert_alpha()
+                    sprites.image = pygame.image.load(current_level['selected_button']).convert_alpha()
                 else:
-                    sprites.image = pygame.image.load("../UI/UnselectedButtonBubble.png").convert_alpha()
+                    sprites.image = pygame.image.load(current_level['unselected_button']).convert_alpha()
 
         if self.back.sprite.rect.colliderect(self.mouse):
             self.back.sprite.image = pygame.image.load("../UI/SelectedButtonBubble.png").convert_alpha()
@@ -94,7 +107,7 @@ class Overworld:
 
     def run(self):
 
-        bg = pygame.image.load('../Graphics/Textures/Backgrounds/bg.png').convert()
+        bg = pygame.image.load('../Graphics/Textures/Backgrounds/Levels_bg.png').convert()
         self.display_surface.blit(bg, (0, 0))
 
         self.draw_paths()
