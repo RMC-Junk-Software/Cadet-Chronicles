@@ -43,7 +43,7 @@ class Pause:
             self.title = 'You Graduated!'
             self.title_pos = (500, 300)
             self.button1 = 'Main Menu'
-            self.button1_pos = (500, 500)
+            self.button1_pos = (500, 350)
         elif self.status == 'dead':
             self.title = 'You Failed Out'
             self.button1 = 'Main Menu'
@@ -72,8 +72,8 @@ class Pause:
         self.play = pygame.sprite.GroupSingle()
         self.back = pygame.sprite.GroupSingle()
 
-        self.title_text = pygame.font.Font("./fonts/EDITIA__.TTF", 60).render(self.title, True, (255, 255, 255))
-        self.title_text_rect = self.title_text.get_rect(center=self.title_pos)
+        self.title_text = pygame.font.Font("./fonts/EDITIA__.TTF", 50).render(self.title, True, (255, 255, 255))
+        self.title_text_rect = self.title_text.get_rect(center=(500, 50))
 
         play_button = Node(self.button1_pos)
         self.play.add(play_button)
@@ -126,7 +126,7 @@ class Pause:
         if self.status == 'pause':
             bg = pygame.image.load('../Graphics/Textures/Backgrounds/Pause_bg.png').convert()
         elif self.status == 'LOP':
-            bg = pygame.image.load('../Graphics/Textures/Backgrounds/Levels_bg.png').convert()
+            bg = pygame.image.load('../Graphics/Textures/Backgrounds/LOP_bg.png').convert()
         elif self.status == 'winner':
             bg = pygame.image.load('../Graphics/Textures/Backgrounds/Winner_bg.png').convert()
         elif self.status == 'dead':

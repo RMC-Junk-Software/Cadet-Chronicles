@@ -19,7 +19,7 @@ level1 = {
           'background': '../Graphics/Textures/Backgrounds/Level1_bg.png',
           'unselected_button': '../UI/UnselectedButtonBubble.png',
           'selected_button': '../UI/SelectedButtonBubble.png',
-          'node_pos': (150, 300),
+          'node_pos': (125, 300),
           'unlock': 1}
 
 level2 = {
@@ -43,7 +43,7 @@ level2 = {
           'background': '../Graphics/Textures/Backgrounds/Level2_bg.png',
           'unselected_button': '../UI/UnselectedButtonBubble.png',
           'selected_button': '../UI/SelectedButtonBubble.png',
-          'node_pos': (400, 600),
+          'node_pos': (375, 600),
           'unlock': 2}
 
 level3 = {
@@ -67,7 +67,7 @@ level3 = {
           'background': '../Graphics/Textures/Backgrounds/Level3_bg.png',
           'unselected_button': '../UI/UnselectedButtonBubble.png',
           'selected_button': '../UI/SelectedButtonBubble.png',
-          'node_pos': (600, 250),
+          'node_pos': (625, 250),
           'unlock': 3}
 
 level4 = {
@@ -94,7 +94,7 @@ level4 = {
           'background': '../Graphics/Textures/Backgrounds/Level4_bg.png',
           'unselected_button': '../UI/UnselectedButtonBubble.png',
           'selected_button': '../UI/SelectedButtonBubble.png',
-          'node_pos': (850, 550),
+          'node_pos': (875, 550),
           'unlock': 4}
 
 

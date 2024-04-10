@@ -263,10 +263,10 @@ class Level:
         self.camera.update(self.player.sprite)
 
         # Update tiles
-        for tile in self.terrain_sprites:
+        for tile in self.indoor_sprites:
             self.display_surface.blit(tile.image, self.camera.apply(tile))
 
-        for tile in self.indoor_sprites:
+        for tile in self.terrain_sprites:
             self.display_surface.blit(tile.image, self.camera.apply(tile))
 
         for tile in self.collectible_sprites:
