@@ -57,8 +57,8 @@ level3 = {
           'constraint': '../Levels/3/Level3_constraint.csv',
           'flag': '../Levels/3/Level3_flag.csv',
           # png files
-          'terrain_skin': '../Graphics/Textures/tile.png',
-          'indoor_skin': '../Graphics/Textures/Level1_tiles/Lvl1TilesV1.png',
+          'terrain_skin': '../Graphics/Textures/Level3_tiles/Lvl3Floor.png',
+          'indoor_skin': '../Graphics/Textures/Level3_tiles/Lvl3Background.png',
           'player_skin': '../Graphics/Character/elof.png',
           'obstacle_skin': '../Graphics/Textures/barbedwire02.png',
           'enemy_skin': '../Graphics/Character/MP.png',
