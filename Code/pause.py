@@ -36,9 +36,9 @@ class Pause:
         elif self.status == 'LOP':
             self.title = 'You Failed'
             self.button1 = 'LOP'
-            self.button1_pos = (300, 350)
+            self.button1_pos = (350, 560)
             self.button2 = 'Quit'
-            self.button2_pos = (700, 350)
+            self.button2_pos = (650, 560)
         elif self.status == 'winner':
             self.title = 'You Graduated!'
             self.title_pos = (500, 300)
