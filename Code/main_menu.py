@@ -94,4 +94,3 @@ class main_menu:
         time = current_time - self.time
         if time > 300:
             self.check_mouse()
-        self.check_mouse()

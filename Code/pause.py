@@ -47,7 +47,7 @@ class Pause:
         elif self.status == 'dead':
             self.title = 'You Failed Out'
             self.button1 = 'Main Menu'
-            self.button1_pos = (500, 350)
+            self.button1_pos = (500, 250)
 
         self.screen = pygame.display.set_mode((screen_width, screen_height))
         self.clock = pygame.time.Clock()
@@ -130,7 +130,7 @@ class Pause:
         elif self.status == 'winner':
             bg = pygame.image.load('../Graphics/Textures/Backgrounds/Winner_bg.png').convert()
         elif self.status == 'dead':
-            bg = pygame.image.load('../Graphics/Textures/Backgrounds/Levels_bg.png').convert()
+            bg = pygame.image.load('../Graphics/Textures/Backgrounds/dead_bg.png').convert()
         self.display_surface.blit(bg, (0, 0))
 
         self.play.draw(self.display_surface)
