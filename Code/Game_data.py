@@ -60,7 +60,7 @@ level3 = {
           'terrain_skin': '../Graphics/Textures/Level3_tiles/Lvl3Floor.png',
           'indoor_skin': '../Graphics/Textures/Level3_tiles/Lvl3Background.png',
           'player_skin': '../Graphics/Character/elof.png',
-          'obstacle_skin': '../Graphics/Textures/barbedwire02.png',
+          'obstacle_skin': '../Graphics/Textures/barbedwire.png',
           'enemy_skin': '../Graphics/Character/MP.png',
           # other
           'music': '../Sounds/TheForest.wav',
