@@ -24,7 +24,6 @@ class main_menu:
         self.mouse = pygame.Rect(0, 0, 5, 5)
         self.time = pygame.time.get_ticks()
 
-
     # Setup play and quit buttons
     def setup_nodes(self):
         self.play = pygame.sprite.GroupSingle()
@@ -34,17 +33,17 @@ class main_menu:
         self.title_text = pygame.font.Font("./fonts/EDITIA__.TTF", 40).render("Cadet Chronicles: March to the Arch", True, (255, 255, 255))
         self.title_text_rect = self.title_text.get_rect(center=(500, 50))
 
-        play_button = Node((500, 150))
+        play_button = Node((500, 200))
         self.play.add(play_button)
         self.Start_Text = pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("Start", True, (255,255,255))
         self.start_text_rect = self.Start_Text.get_rect(center=play_button.rect.center)
 
-        back_button = Node((800, 150))
+        back_button = Node((800, 200))
         self.quit.add(back_button)
         self.Exit_text = pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("Exit", True, (255, 255, 255))
         self.exit_text_rect = self.Exit_text.get_rect(center=back_button.rect.center)
 
-        instruction_button = Node((200, 150))
+        instruction_button = Node((200, 200))
         self.instructions.add(instruction_button)
         self.Instruction_text = pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("Help", True,(255, 255, 255))
         self.Instruction_text_rect = self.Instruction_text.get_rect(center=instruction_button.rect.center)
@@ -56,7 +55,7 @@ class main_menu:
         if self.play.sprite.rect.colliderect(self.mouse):
             self.play.sprite.image = pygame.image.load("../UI/SelectedButtonBubble.png").convert_alpha()
             if pygame.mouse.get_pressed()[0]:
-                self.create_overworld(self.current_level, self.max_level, self.lives)
+                self.create_overworld(self.current_level, self.max_level, self.lives, 500)
         else:
             self.play.sprite.image = pygame.image.load("../UI/UnselectedButtonBubble.png").convert_alpha()
 
@@ -94,4 +93,3 @@ class main_menu:
         time = current_time - self.time
         if time > 300:
             self.check_mouse()
-        self.check_mouse()

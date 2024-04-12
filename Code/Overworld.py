@@ -33,9 +33,6 @@ class Overworld:
         self.display_surface = surface
         self.lives = lives
 
-        self.text = [pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("1st Year", True, (255, 255, 255)),pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("2nd Year", True, (255, 255, 255)),pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("3rd Year", True, (255, 255, 255)),pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("4th Year", True, (255, 255, 255)),pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("Back", True, (255, 255, 255)),pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("lives: {lives}/2".format(lives=self.lives), True, (255, 255, 255))]
-        self.text_rect = []
-
         self.create_level = create_level
         self.create_main_menu = create_main_menu
         self.mouse = pygame.Rect(0, 0, 5, 5)
@@ -57,21 +54,21 @@ class Overworld:
                 node_sprite = Node_levels(node_data['node_pos'], 'locked', current_level)
             self.nodes.add(node_sprite)
 
-            self.text_rect.append(self.text[index].get_rect(center=node_sprite.rect.center))
-
     # Setup back button
     def back_button(self):
         self.back = pygame.sprite.GroupSingle()
+        self.back_text = pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("Back", True, (255, 255, 255))
         node_sprite = Node((100,50), 'available')
         self.back.add(node_sprite)
-        self.text_rect.append(self.text[4].get_rect(center=node_sprite.rect.center))
+        self.back_text_rect = self.back_text.get_rect(center=node_sprite.rect.center)
 
     # Setup lives text
     def lives_text(self):
         self.life = pygame.sprite.GroupSingle()
+        self.life_text = pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("lives: {lives}/2".format(lives=self.lives), True, (255, 255, 255))
         node_sprite = Node((500, 50), 'locked')
         self.life.add(node_sprite)
-        self.text_rect.append(self.text[5].get_rect(center=node_sprite.rect.center))
+        self.life_text_rect = self.life_text.get_rect(center=node_sprite.rect.center)
 
     # Create green and red paths between levels
     def draw_paths(self):
@@ -115,8 +112,8 @@ class Overworld:
 
         self.back.draw(self.display_surface)
         self.life.draw(self.display_surface)
-        for i in range(len(self.text)):
-            self.display_surface.blit(self.text[i], self.text_rect[i])
+        self.display_surface.blit(self.back_text, self.back_text_rect)
+        self.display_surface.blit(self.life_text, self.life_text_rect)
 
         current_time = pygame.time.get_ticks()
         time = current_time - self.time

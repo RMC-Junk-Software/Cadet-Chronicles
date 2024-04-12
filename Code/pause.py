@@ -36,18 +36,32 @@ class Pause:
         elif self.status == 'LOP':
             self.title = 'You Failed'
             self.button1 = 'LOP'
-            self.button1_pos = (300, 350)
+            self.button1_pos = (350, 560)
             self.button2 = 'Quit'
-            self.button2_pos = (700, 350)
+            self.button2_pos = (650, 560)
         elif self.status == 'winner':
             self.title = 'You Graduated!'
             self.title_pos = (500, 300)
             self.button1 = 'Main Menu'
-            self.button1_pos = (500, 500)
+            self.button1_pos = (500, 350)
+            self.button2 = 'High Scores'
+            self.button2_pos = (500, 450)
         elif self.status == 'dead':
             self.title = 'You Failed Out'
             self.button1 = 'Main Menu'
-            self.button1_pos = (500, 350)
+            self.button1_pos = (500, 250)
+        elif self.status == 'scores':
+            self.title = 'High Scores'
+            self.button1 = 'Back'
+            self.button1_pos = (100, 50)
+            self.level1 = pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("Level 1: {score} seconds".format(score=self.current_level), True, (255, 255, 255))
+            self.level1_rect = self.level1.get_rect(topleft=(350, 200))
+            self.level2 = pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("Level 2: {score} seconds".format(score=self.max_level), True, (255, 255, 255))
+            self.level2_rect = self.level2.get_rect(topleft=(350, 300))
+            self.level3 = pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("Level 3: {score} seconds".format(score=self.lives), True, (255, 255, 255))
+            self.level3_rect = self.level3.get_rect(topleft=(350, 400))
+            self.level4 = pygame.font.Font("./fonts/EDITIA__.TTF", 30).render("Level 4: {score} seconds".format(score=self.create_overworld), True, (255, 255, 255))
+            self.level4_rect = self.level4.get_rect(topleft=(350, 500))
 
         self.screen = pygame.display.set_mode((screen_width, screen_height))
         self.clock = pygame.time.Clock()
@@ -72,8 +86,8 @@ class Pause:
         self.play = pygame.sprite.GroupSingle()
         self.back = pygame.sprite.GroupSingle()
 
-        self.title_text = pygame.font.Font("./fonts/EDITIA__.TTF", 60).render(self.title, True, (255, 255, 255))
-        self.title_text_rect = self.title_text.get_rect(center=self.title_pos)
+        self.title_text = pygame.font.Font("./fonts/EDITIA__.TTF", 50).render(self.title, True, (255, 255, 255))
+        self.title_text_rect = self.title_text.get_rect(center=(500, 50))
 
         play_button = Node(self.button1_pos)
         self.play.add(play_button)
@@ -94,13 +108,15 @@ class Pause:
                 if self.status == 'pause':
                     self.loop = 0
                 elif self.status == 'LOP':
-                    self.create_overworld(self.current_level, 0, self.lives)
+                    self.create_overworld(self.current_level, 0, self.lives, 500)
                     self.loop = 0
                 elif self.status == 'winner':
                     self.create_main_menu(0, 0, 2, 1)
                     self.loop = 0
                 elif self.status == 'dead':
                     self.create_main_menu(0, 0, 2, 1)
+                    self.loop = 0
+                elif self.status == 'scores':
                     self.loop = 0
         else:
             self.play.sprite.image = pygame.image.load("../UI/UnselectedButtonBubble.png").convert_alpha()
@@ -109,14 +125,16 @@ class Pause:
             self.back.sprite.image = pygame.image.load("../UI/SelectedButtonBubble.png").convert_alpha()
             if pygame.mouse.get_pressed()[0]:
                 if self.status == 'pause':
-                    self.create_overworld(self.current_level, 0, self.lives)
+                    self.create_overworld(self.current_level, 0, self.lives, 500)
                     self.loop = 0
                 elif self.status == 'LOP':
                     self.create_main_menu(0, 0, 2, 1)
                     self.loop = 0
                 elif self.status == 'winner':
-                    pass
+                    Pause(self.current_level, self.max_level, self.display_surface, self.lives, self.create_overworld, self.create_main_menu, 'scores')
                 elif self.status == 'dead':
+                    pass
+                elif self.status == 'scores':
                     pass
         else:
             self.back.sprite.image = pygame.image.load("../UI/UnselectedButtonBubble.png").convert_alpha()
@@ -126,18 +144,25 @@ class Pause:
         if self.status == 'pause':
             bg = pygame.image.load('../Graphics/Textures/Backgrounds/Pause_bg.png').convert()
         elif self.status == 'LOP':
-            bg = pygame.image.load('../Graphics/Textures/Backgrounds/Levels_bg.png').convert()
+            bg = pygame.image.load('../Graphics/Textures/Backgrounds/LOP_bg.png').convert()
         elif self.status == 'winner':
             bg = pygame.image.load('../Graphics/Textures/Backgrounds/Winner_bg.png').convert()
         elif self.status == 'dead':
-            bg = pygame.image.load('../Graphics/Textures/Backgrounds/Levels_bg.png').convert()
+            bg = pygame.image.load('../Graphics/Textures/Backgrounds/dead_bg.png').convert()
+        elif self.status == 'scores':
+            bg = pygame.image.load('../Graphics/Textures/Backgrounds/Scores_bg.png').convert()
         self.display_surface.blit(bg, (0, 0))
 
         self.play.draw(self.display_surface)
-        if self.status == 'pause' or self.status == 'LOP':
+        if self.status == 'pause' or self.status == 'LOP' or self.status == 'winner':
             self.back.draw(self.display_surface)
+            self.display_surface.blit(self.Exit_text, self.exit_text_rect)
+        if self.status == 'scores':
+            self.display_surface.blit(self.level1, self.level1_rect)
+            self.display_surface.blit(self.level2, self.level2_rect)
+            self.display_surface.blit(self.level3, self.level3_rect)
+            self.display_surface.blit(self.level4, self.level4_rect)
         self.display_surface.blit(self.Start_Text, self.start_text_rect)
-        self.display_surface.blit(self.Exit_text, self.exit_text_rect)
         self.display_surface.blit(self.title_text, self.title_text_rect)
 
         self.check_mouse()

@@ -17,9 +17,9 @@ level1 = {
           # other
           'music': '../Sounds/Magic Scout - Farm.mp3',
           'background': '../Graphics/Textures/Backgrounds/Level1_bg.png',
-          'unselected_button': '../UI/UnselectedButtonBubble.png',
-          'selected_button': '../UI/SelectedButtonBubble.png',
-          'node_pos': (150, 300),
+          'unselected_button': '../UI/Level1_button.png',
+          'selected_button': '../UI/Level1_button_black.png',
+          'node_pos': (125, 300),
           'unlock': 1}
 
 level2 = {
@@ -41,9 +41,9 @@ level2 = {
           # other
           'music': '../Sounds/Getting it Done.mp3',
           'background': '../Graphics/Textures/Backgrounds/Level2_bg.png',
-          'unselected_button': '../UI/UnselectedButtonBubble.png',
-          'selected_button': '../UI/SelectedButtonBubble.png',
-          'node_pos': (400, 600),
+          'unselected_button': '../UI/Level2_button.png',
+          'selected_button': '../UI/Level2_button_black.png',
+          'node_pos': (375, 600),
           'unlock': 2}
 
 level3 = {
@@ -57,17 +57,17 @@ level3 = {
           'constraint': '../Levels/3/Level3_constraint.csv',
           'flag': '../Levels/3/Level3_flag.csv',
           # png files
-          'terrain_skin': '../Graphics/Textures/tile.png',
-          'indoor_skin': '../Graphics/Textures/Level1_tiles/Lvl1TilesV1.png',
+          'terrain_skin': '../Graphics/Textures/Level3_tiles/Lvl3Floor.png',
+          'indoor_skin': '../Graphics/Textures/Level3_tiles/Lvl3Background.png',
           'player_skin': '../Graphics/Character/elof.png',
           'obstacle_skin': '../Graphics/Textures/barbedwire.png',
           'enemy_skin': '../Graphics/Character/MP.png',
           # other
           'music': '../Sounds/TheForest.wav',
           'background': '../Graphics/Textures/Backgrounds/Level3_bg.png',
-          'unselected_button': '../UI/UnselectedButtonBubble.png',
-          'selected_button': '../UI/SelectedButtonBubble.png',
-          'node_pos': (600, 250),
+          'unselected_button': '../UI/Level3_button.png',
+          'selected_button': '../UI/Level3_button_black.png',
+          'node_pos': (625, 250),
           'unlock': 3}
 
 level4 = {
@@ -80,21 +80,18 @@ level4 = {
           'enemy': '../Levels/4/Level4_enemy.csv',
           'constraint': '../Levels/4/Level4_constraint.csv',
           'flag': '../Levels/4/Level4_flag.csv',
-
-
           # png files
-          'terrain_skin': '../Graphics/Textures/tile.png',
-          'indoor_skin': '../Graphics/Textures/Level1_tiles/Lvl1TilesV1.png',
+          'terrain_skin': '../Graphics/Textures/Level4_tiles/Lvl4Floor.png',
+          'indoor_skin': '../Graphics/Textures/Level4_tiles/Lvl4Background.png',
           'player_skin': '../Graphics/Character/scarletselof.png',
           'obstacle_skin': '../Graphics/Textures/wine_obstacle.png',
           'enemy_skin': '../Graphics/Character/enemybaguette.png',
-
           # other
           'music': '../Sounds/French.mp3',
           'background': '../Graphics/Textures/Backgrounds/Level4_bg.png',
-          'unselected_button': '../UI/UnselectedButtonBubble.png',
-          'selected_button': '../UI/SelectedButtonBubble.png',
-          'node_pos': (850, 550),
+          'unselected_button': '../UI/Level4_button.png',
+          'selected_button': '../UI/Level4_button_black.png',
+          'node_pos': (875, 550),
           'unlock': 4}
 
 

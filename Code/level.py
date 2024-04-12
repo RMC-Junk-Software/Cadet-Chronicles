@@ -10,6 +10,7 @@ import Camera
 White = (255, 255, 255)
 Black = (10,10,10)
 
+
 class Level:
     def __init__(self, level_data, surface, create_overworld, create_level, create_main_menu, lives):
         self.current_level = level_data
@@ -21,7 +22,6 @@ class Level:
         self.lives = lives
 
         # Sounds
-
         self.collect_sound = pygame.mixer.Sound("../Sounds/Collect.mp3")
         self.last_collect_sound = pygame.mixer.Sound("../Sounds/Final_Collect.mp3")
         self.hurt_sound = pygame.mixer.Sound("../Sounds/Injure.wav")
@@ -48,10 +48,9 @@ class Level:
         self.hurt_time2 = 0
         self.health_text_rect = pygame.Surface((300, 30)).get_rect(topleft=(5, 8))
 
-        #timer text
+        # timer text
         self.timer = 0
-        self.timer_text = textOutline(self.font, "Time: {time}".format(time=self.timer),
-                                            White, Black)
+        self.timer_text = textOutline(self.font, "Time: {time}".format(time=self.timer), White, Black)
         self.timer_text_rect = pygame.Surface((300, 30)).get_rect(topleft=(5, 70))
 
         # Player sprite
@@ -101,16 +100,13 @@ class Level:
             Pause(self.current_level, self.new_max_level, self.display_surface, self.lives, self.create_overworld, self.create_main_menu, 'pause')
         if pygame.sprite.spritecollide(player, self.flag_raised, False):
             if self.collected >= 9:
-                if self.new_max_level == 4:
-                    Pause(self.current_level, self.new_max_level, self.display_surface, self.lives,
-                          self.create_overworld, self.create_main_menu, 'winner')
-                else:
-                    self.create_overworld(self.current_level, self.new_max_level, self.lives)
+                self.create_overworld(self.current_level, self.new_max_level, self.lives, self.timer)
         if self.health <= 0 and self.lives == 2:
             self.death_sound.play()
             Pause(self.current_level, self.new_max_level, self.display_surface, self.lives - 1, self.create_overworld,
                   self.create_main_menu, 'LOP')
         if self.health <= 0 and self.lives == 1:
+            self.death_sound.play()
             Pause(self.current_level, self.new_max_level, self.display_surface, self.lives - 1, self.create_overworld,
                   self.create_main_menu, 'dead')
 
@@ -250,8 +246,7 @@ class Level:
 
     def updatetimer(self):
         self.timer += 1
-        self.timer_text = textOutline(self.font, "Time: {time}".format(time=self.timer),
-                                      White, Black)
+        self.timer_text = textOutline(self.font, "Time: {time}".format(time=self.timer), White, Black)
         self.timer_text_rect = pygame.Surface((300, 30)).get_rect(topleft=(5, 70))
 
     def run(self):
@@ -263,10 +258,10 @@ class Level:
         self.camera.update(self.player.sprite)
 
         # Update tiles
-        for tile in self.terrain_sprites:
+        for tile in self.indoor_sprites:
             self.display_surface.blit(tile.image, self.camera.apply(tile))
 
-        for tile in self.indoor_sprites:
+        for tile in self.terrain_sprites:
             self.display_surface.blit(tile.image, self.camera.apply(tile))
 
         for tile in self.collectible_sprites:
