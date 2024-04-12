@@ -81,8 +81,8 @@ level4 = {
           'constraint': '../Levels/4/Level4_constraint.csv',
           'flag': '../Levels/4/Level4_flag.csv',
           # png files
-          'terrain_skin': '../Graphics/Textures/tile.png',
-          'indoor_skin': '../Graphics/Textures/Level1_tiles/Lvl1TilesV1.png',
+          'terrain_skin': '../Graphics/Textures/Level4_tiles/Lvl4Floor.png',
+          'indoor_skin': '../Graphics/Textures/Level4_tiles/Lvl4Background.png',
           'player_skin': '../Graphics/Character/scarletselof.png',
           'obstacle_skin': '../Graphics/Textures/wine_obstacle.png',
           'enemy_skin': '../Graphics/Character/enemybaguette.png',
