@@ -24,7 +24,6 @@ class main_menu:
         self.mouse = pygame.Rect(0, 0, 5, 5)
         self.time = pygame.time.get_ticks()
 
-
     # Setup play and quit buttons
     def setup_nodes(self):
         self.play = pygame.sprite.GroupSingle()
@@ -56,7 +55,7 @@ class main_menu:
         if self.play.sprite.rect.colliderect(self.mouse):
             self.play.sprite.image = pygame.image.load("../UI/SelectedButtonBubble.png").convert_alpha()
             if pygame.mouse.get_pressed()[0]:
-                self.create_overworld(self.current_level, self.max_level, self.lives)
+                self.create_overworld(self.current_level, self.max_level, self.lives, 500)
         else:
             self.play.sprite.image = pygame.image.load("../UI/UnselectedButtonBubble.png").convert_alpha()
 

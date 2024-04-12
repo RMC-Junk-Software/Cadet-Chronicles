@@ -10,6 +10,7 @@ import Camera
 White = (255, 255, 255)
 Black = (10,10,10)
 
+
 class Level:
     def __init__(self, level_data, surface, create_overworld, create_level, create_main_menu, lives):
         self.current_level = level_data
@@ -47,10 +48,9 @@ class Level:
         self.hurt_time2 = 0
         self.health_text_rect = pygame.Surface((300, 30)).get_rect(topleft=(5, 8))
 
-        #timer text
+        # timer text
         self.timer = 0
-        self.timer_text = textOutline(self.font, "Time: {time}".format(time=self.timer),
-                                            White, Black)
+        self.timer_text = textOutline(self.font, "Time: {time}".format(time=self.timer), White, Black)
         self.timer_text_rect = pygame.Surface((300, 30)).get_rect(topleft=(5, 70))
 
         # Player sprite
@@ -100,14 +100,7 @@ class Level:
             Pause(self.current_level, self.new_max_level, self.display_surface, self.lives, self.create_overworld, self.create_main_menu, 'pause')
         if pygame.sprite.spritecollide(player, self.flag_raised, False):
             if self.collected >= 9:
-                if self.new_max_level == 4:
-                    pygame.mixer.music.set_volume(0.7)
-                    pygame.mixer.music.load("../Sounds/Beep_Boop_Precision.mp3")
-                    pygame.mixer.music.play(-1)
-                    Pause(self.current_level, self.new_max_level, self.display_surface, self.lives,
-                          self.create_overworld, self.create_main_menu, 'winner')
-                else:
-                    self.create_overworld(self.current_level, self.new_max_level, self.lives)
+                self.create_overworld(self.current_level, self.new_max_level, self.lives, self.timer)
         if self.health <= 0 and self.lives == 2:
             self.death_sound.play()
             Pause(self.current_level, self.new_max_level, self.display_surface, self.lives - 1, self.create_overworld,
@@ -253,8 +246,7 @@ class Level:
 
     def updatetimer(self):
         self.timer += 1
-        self.timer_text = textOutline(self.font, "Time: {time}".format(time=self.timer),
-                                      White, Black)
+        self.timer_text = textOutline(self.font, "Time: {time}".format(time=self.timer), White, Black)
         self.timer_text_rect = pygame.Surface((300, 30)).get_rect(topleft=(5, 70))
 
     def run(self):
