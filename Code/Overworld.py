@@ -1,3 +1,5 @@
+import time
+
 import pygame
 from Game_data import levels
 
@@ -79,6 +81,28 @@ class Overworld:
             points2 = [node['node_pos'] for index, node in enumerate(levels.values()) if index >= self.max_level]
             pygame.draw.lines(self.display_surface, 'red', False, points2, 6)
 
+    def display_level_info(self, level_num, duration):
+        if level_num == 0:
+            info_screen = pygame.image.load('../UI/Level1Screen.png').convert()
+            self.display_surface.blit(info_screen, (0, 0))
+            pygame.display.flip()
+            pygame.time.wait(duration)
+        if level_num == 1:
+            info_screen = pygame.image.load('../UI/Level2Screen.png').convert()
+            self.display_surface.blit(info_screen, (0, 0))
+            pygame.display.flip()
+            pygame.time.wait(duration)
+        if level_num == 2:
+            info_screen = pygame.image.load('../UI/Level3Screen.png').convert()
+            self.display_surface.blit(info_screen, (0, 0))
+            pygame.display.flip()
+            pygame.time.wait(duration)
+        if level_num == 3:
+            info_screen = pygame.image.load('../UI/Level4Screen.png').convert()
+            self.display_surface.blit(info_screen, (0, 0))
+            pygame.display.flip()
+            pygame.time.wait(duration)
+
     # Check for mouse inputs
     def check_mouse(self):
         self.mouse.center = pygame.mouse.get_pos()
@@ -88,6 +112,7 @@ class Overworld:
                 if index <= self.max_level:
                     sprites.image = pygame.image.load(current_level['selected_button']).convert_alpha()
                     if pygame.mouse.get_pressed()[0]:
+                        self.display_level_info(index, 5000)
                         self.create_level(levels[index], self.lives)
             else:
                 if index > self.max_level:
