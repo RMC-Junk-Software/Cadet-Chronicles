@@ -7,7 +7,7 @@ class Node(pygame.sprite.Sprite):
     def __init__(self, pos):
         super().__init__()
         self.image = pygame.Surface((200, 80))
-        self.image = pygame.image.load("../UI/UnselectedButtonBubble.png").convert_alpha()
+        self.image = pygame.image.load("./UI/UnselectedButtonBubble.png").convert_alpha()
         self.rect = self.image.get_rect(center = pos)
 
 
@@ -103,7 +103,7 @@ class Pause:
         self.mouse.center = pygame.mouse.get_pos()
 
         if self.play.sprite.rect.colliderect(self.mouse):
-            self.play.sprite.image = pygame.image.load("../UI/SelectedButtonBubble.png").convert_alpha()
+            self.play.sprite.image = pygame.image.load("./UI/SelectedButtonBubble.png").convert_alpha()
             if pygame.mouse.get_pressed()[0]:
                 if self.status == 'pause':
                     self.loop = 0
@@ -119,10 +119,10 @@ class Pause:
                 elif self.status == 'scores':
                     self.loop = 0
         else:
-            self.play.sprite.image = pygame.image.load("../UI/UnselectedButtonBubble.png").convert_alpha()
+            self.play.sprite.image = pygame.image.load("./UI/UnselectedButtonBubble.png").convert_alpha()
 
         if self.back.sprite.rect.colliderect(self.mouse):
-            self.back.sprite.image = pygame.image.load("../UI/SelectedButtonBubble.png").convert_alpha()
+            self.back.sprite.image = pygame.image.load("./UI/SelectedButtonBubble.png").convert_alpha()
             if pygame.mouse.get_pressed()[0]:
                 if self.status == 'pause':
                     self.create_overworld(self.current_level, 0, self.lives, 500)
@@ -137,20 +137,20 @@ class Pause:
                 elif self.status == 'scores':
                     pass
         else:
-            self.back.sprite.image = pygame.image.load("../UI/UnselectedButtonBubble.png").convert_alpha()
+            self.back.sprite.image = pygame.image.load("./UI/UnselectedButtonBubble.png").convert_alpha()
 
     def run(self):
 
         if self.status == 'pause':
-            bg = pygame.image.load('../Graphics/Textures/Backgrounds/Pause_bg.png').convert()
+            bg = pygame.image.load('./Graphics/Textures/Backgrounds/Pause_bg.png').convert()
         elif self.status == 'LOP':
-            bg = pygame.image.load('../Graphics/Textures/Backgrounds/LOP_bg.png').convert()
+            bg = pygame.image.load('./Graphics/Textures/Backgrounds/LOP_bg.png').convert()
         elif self.status == 'winner':
-            bg = pygame.image.load('../Graphics/Textures/Backgrounds/Winner_bg.png').convert()
+            bg = pygame.image.load('./Graphics/Textures/Backgrounds/Winner_bg.png').convert()
         elif self.status == 'dead':
-            bg = pygame.image.load('../Graphics/Textures/Backgrounds/dead_bg.png').convert()
+            bg = pygame.image.load('./Graphics/Textures/Backgrounds/dead_bg.png').convert()
         elif self.status == 'scores':
-            bg = pygame.image.load('../Graphics/Textures/Backgrounds/Scores_bg.png').convert()
+            bg = pygame.image.load('./Graphics/Textures/Backgrounds/Scores_bg.png').convert()
         self.display_surface.blit(bg, (0, 0))
 
         self.play.draw(self.display_surface)

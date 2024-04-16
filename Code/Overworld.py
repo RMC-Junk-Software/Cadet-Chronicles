@@ -21,9 +21,9 @@ class Node(pygame.sprite.Sprite):
         super().__init__()
 
         if status == 'available':
-            self.image = pygame.image.load('../UI/UnselectedButtonBubble.png').convert_alpha()
+            self.image = pygame.image.load('./UI/UnselectedButtonBubble.png').convert_alpha()
         else:
-            self.image = pygame.image.load('../UI/SelectedButtonBubble.png').convert_alpha()
+            self.image = pygame.image.load('./UI/SelectedButtonBubble.png').convert_alpha()
         self.rect = self.image.get_rect(center=pos)
 
 
@@ -83,26 +83,20 @@ class Overworld:
 
     def display_level_info(self, level_num, duration):
         if level_num == 0:
-            info_screen = pygame.image.load('../UI/Level1Screen.png').convert()
+            info_screen = pygame.image.load('./UI/Level1Screen.png').convert()
             self.display_surface.blit(info_screen, (0, 0))
-            pygame.display.flip()
-            pygame.time.wait(duration)
         if level_num == 1:
-            info_screen = pygame.image.load('../UI/Level2Screen.png').convert()
+            info_screen = pygame.image.load('./UI/Level2Screen.png').convert()
             self.display_surface.blit(info_screen, (0, 0))
-            pygame.display.flip()
-            pygame.time.wait(duration)
         if level_num == 2:
-            info_screen = pygame.image.load('../UI/Level3Screen.png').convert()
+            info_screen = pygame.image.load('./UI/Level3Screen.png').convert()
             self.display_surface.blit(info_screen, (0, 0))
-            pygame.display.flip()
-            pygame.time.wait(duration)
         if level_num == 3:
-            info_screen = pygame.image.load('../UI/Level4Screen.png').convert()
+            info_screen = pygame.image.load('./UI/Level4Screen.png').convert()
             self.display_surface.blit(info_screen, (0, 0))
-            pygame.display.flip()
-            pygame.time.wait(duration)
 
+        pygame.display.update()
+        pygame.time.wait(duration)
     # Check for mouse inputs
     def check_mouse(self):
         self.mouse.center = pygame.mouse.get_pos()
@@ -121,15 +115,15 @@ class Overworld:
                     sprites.image = pygame.image.load(current_level['unselected_button']).convert_alpha()
 
         if self.back.sprite.rect.colliderect(self.mouse):
-            self.back.sprite.image = pygame.image.load("../UI/SelectedButtonBubble.png").convert_alpha()
+            self.back.sprite.image = pygame.image.load("./UI/SelectedButtonBubble.png").convert_alpha()
             if pygame.mouse.get_pressed()[0]:
                 self.create_main_menu(self.current_level, self.max_level, self.lives, 0)
         else:
-            self.back.sprite.image = pygame.image.load("../UI/UnselectedButtonBubble.png").convert_alpha()
+            self.back.sprite.image = pygame.image.load("./UI/UnselectedButtonBubble.png").convert_alpha()
 
     def run(self):
 
-        bg = pygame.image.load('../Graphics/Textures/Backgrounds/Levels_bg.png').convert()
+        bg = pygame.image.load('./Graphics/Textures/Backgrounds/Levels_bg.png').convert()
         self.display_surface.blit(bg, (0, 0))
 
         self.draw_paths()

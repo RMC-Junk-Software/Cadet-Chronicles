@@ -61,7 +61,7 @@ class Game:
 
     def play_precision(self):
         pygame.mixer.music.set_volume(0.7)
-        pygame.mixer.music.load("../Sounds/Beep_Boop_Precision.mp3")
+        pygame.mixer.music.load("./Sounds/Beep_Boop_Precision.mp3")
         pygame.mixer.music.play(-1)
 
     # Decides what state the game is in
@@ -76,6 +76,9 @@ class Game:
 # Pygame setup
 pygame.init()
 screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("Cadet Chronicles: March to the Arch")
+icon = pygame.image.load("./Graphics/icon.png")
+pygame.display.set_icon(icon)
 clock = pygame.time.Clock()
 game = Game()
 clock = pygame.time.Clock()

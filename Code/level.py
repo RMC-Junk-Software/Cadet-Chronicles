@@ -13,6 +13,7 @@ Black = (10,10,10)
 
 class Level:
     def __init__(self, level_data, surface, create_overworld, create_level, create_main_menu, lives):
+        self.timer = None
         self.current_level = level_data
         self.new_max_level = level_data['unlock']
         self.display_surface = surface
@@ -22,10 +23,10 @@ class Level:
         self.lives = lives
 
         # Sounds
-        self.collect_sound = pygame.mixer.Sound("../Sounds/Collect.mp3")
-        self.last_collect_sound = pygame.mixer.Sound("../Sounds/Final_Collect.mp3")
-        self.hurt_sound = pygame.mixer.Sound("../Sounds/Injure.wav")
-        self.death_sound = pygame.mixer.Sound("../Sounds/Death.mp3")
+        self.collect_sound = pygame.mixer.Sound("./Sounds/Collect.mp3")
+        self.last_collect_sound = pygame.mixer.Sound("./Sounds/Final_Collect.mp3")
+        self.hurt_sound = pygame.mixer.Sound("./Sounds/Injure.wav")
+        self.death_sound = pygame.mixer.Sound("./Sounds/Death.mp3")
 
         pygame.mixer.music.set_volume(.2)
         pygame.mixer.music.load(level_data['music'])
@@ -48,10 +49,7 @@ class Level:
         self.hurt_time2 = 0
         self.health_text_rect = pygame.Surface((300, 30)).get_rect(topleft=(5, 8))
 
-        # timer text
-        self.timer = 0
-        self.timer_text = textOutline(self.font, "Time: {time}".format(time=self.timer), White, Black)
-        self.timer_text_rect = pygame.Surface((300, 30)).get_rect(topleft=(5, 70))
+
 
         # Player sprite
         player_layout = import_csv_layout(level_data['player'])
@@ -90,6 +88,11 @@ class Level:
 
         # Background
         self.bg = pygame.image.load(level_data['background']).convert()
+
+        # timer text
+        self.timer = -5
+        self.timer_text = textOutline(self.font, "Time: {time}".format(time=self.timer), White, Black)
+        self.timer_text_rect = pygame.Surface((300, 30)).get_rect(topleft=(5, 70))
 
     # Check various inputs
     def input(self):
@@ -133,7 +136,7 @@ class Level:
                         sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
 
                     if type == 'collectible':
-                        terrain_tile_list = import_cut_graphics('../Graphics/Sprites/Level1-4CollectiblesV2.png')
+                        terrain_tile_list = import_cut_graphics('./Graphics/Sprites/Level1-4CollectiblesV2.png')
                         tile_surface = terrain_tile_list[int(val)]
                         sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
 
@@ -150,12 +153,12 @@ class Level:
                         sprite = Tile(tile_x, tile_y, x, y)
 
                     if type == 'flag_lowered':
-                        flag_tile_list = import_cut_graphics('../Graphics/Sprites/FlagLowered.png')
+                        flag_tile_list = import_cut_graphics('./Graphics/Sprites/FlagLowered.png')
                         tile_surface = flag_tile_list[int(val)]
                         sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
 
                     if type == 'flag_raised':
-                        flag_tile_list = import_cut_graphics('../Graphics/Sprites/FlagRaised.png')
+                        flag_tile_list = import_cut_graphics('./Graphics/Sprites/FlagRaised.png')
                         tile_surface = flag_tile_list[int(val)]
                         sprite = StaticTile(tile_x, tile_y, x, y, tile_surface)
 
@@ -245,9 +248,10 @@ class Level:
                 enemy.reverse()
 
     def updatetimer(self):
-        self.timer += 1
-        self.timer_text = textOutline(self.font, "Time: {time}".format(time=self.timer), White, Black)
-        self.timer_text_rect = pygame.Surface((300, 30)).get_rect(topleft=(5, 70))
+        if self.timer != None:
+            self.timer += 1
+            self.timer_text = textOutline(self.font, "Time: {time}".format(time=self.timer), White, Black)
+            self.timer_text_rect = pygame.Surface((300, 30)).get_rect(topleft=(5, 70))
 
     def run(self):
 

@@ -8,7 +8,7 @@ class Node(pygame.sprite.Sprite):
     def __init__(self, pos):
         super().__init__()
         self.image = pygame.Surface((200, 80))
-        self.image = pygame.image.load("../UI/UnselectedButtonBubble.png").convert_alpha()
+        self.image = pygame.image.load("./UI/UnselectedButtonBubble.png").convert_alpha()
         self.rect = self.image.get_rect(center = pos)
 
 
@@ -53,33 +53,33 @@ class main_menu:
         self.mouse.center = pygame.mouse.get_pos()
 
         if self.play.sprite.rect.colliderect(self.mouse):
-            self.play.sprite.image = pygame.image.load("../UI/SelectedButtonBubble.png").convert_alpha()
+            self.play.sprite.image = pygame.image.load("./UI/SelectedButtonBubble.png").convert_alpha()
             if pygame.mouse.get_pressed()[0]:
                 self.create_overworld(self.current_level, self.max_level, self.lives, 500)
         else:
-            self.play.sprite.image = pygame.image.load("../UI/UnselectedButtonBubble.png").convert_alpha()
+            self.play.sprite.image = pygame.image.load("./UI/UnselectedButtonBubble.png").convert_alpha()
 
         if self.quit.sprite.rect.colliderect(self.mouse):
-            self.quit.sprite.image = pygame.image.load("../UI/SelectedButtonBubble.png").convert_alpha()
+            self.quit.sprite.image = pygame.image.load("./UI/SelectedButtonBubble.png").convert_alpha()
             if pygame.mouse.get_pressed()[0]:
                 pygame.quit()
                 sys.exit()
         else:
-            self.quit.sprite.image = pygame.image.load("../UI/UnselectedButtonBubble.png").convert_alpha()
+            self.quit.sprite.image = pygame.image.load("./UI/UnselectedButtonBubble.png").convert_alpha()
 
         if self.instructions.sprite.rect.colliderect(self.mouse):
-            self.instructions.sprite.image = pygame.image.load("../UI/SelectedButtonBubble.png").convert_alpha()
+            self.instructions.sprite.image = pygame.image.load("./UI/SelectedButtonBubble.png").convert_alpha()
 
             # create an instruction window that is shown by hovering over it
-            instruction_window = pygame.image.load("../Graphics/Textures/CChowtoplay.png")
+            instruction_window = pygame.image.load("./Graphics/Textures/CChowtoplay.png")
             self.display_surface.blit(instruction_window, (0, 0))
 
         else:
-            self.instructions.sprite.image = pygame.image.load("../UI/UnselectedButtonBubble.png").convert_alpha()
+            self.instructions.sprite.image = pygame.image.load("./UI/UnselectedButtonBubble.png").convert_alpha()
 
     def run(self):
 
-        bg = pygame.image.load('../UI/HomeScreenScaled.png').convert()
+        bg = pygame.image.load('./UI/HomeScreenScaled.png').convert()
         self.display_surface.blit(bg, (0, 0))
         self.play.draw(self.display_surface)
         self.quit.draw(self.display_surface)
